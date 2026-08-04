@@ -38,8 +38,14 @@ export default function HomePage() {
           <div className="hero-image">
             <Image src="/img/index/hero_img.png" alt="ตะกร้าผลไม้จัดพรีเมียม" fill sizes="(max-width: 820px) 100vw, 720px" style={{ objectFit: "cover" }} priority />
           </div>
-          <div className="placeholder"><span>พรีเซนเตอร์ — ครึ่งตัว</span></div>
-          <div className="placeholder"><span>มือคัดผลไม้ close-up</span></div>
+          {/* <div className="placeholder"><span>พรีเซนเตอร์ — ครึ่งตัว</span></div> */}
+          <div className="hero-collage-photo">
+            <Image src="/img/index/half-presenter.png" alt="พรีเซนเตอร์ — ครึ่งตัว" fill sizes="(max-width: 820px) 50vw, 353px" style={{ objectFit: "cover" }} />
+          </div>
+          {/* <div className="placeholder"><span>มือคัดผลไม้ close-up</span></div> */}
+          <div className="hero-collage-photo">
+            <Image src="/img/index/close-up.png" alt="มือคัดผลไม้ close-up" fill sizes="(max-width: 820px) 50vw, 353px" style={{ objectFit: "cover" }} />
+          </div>
         </div>
       </section>
       <section className="benefits section">
