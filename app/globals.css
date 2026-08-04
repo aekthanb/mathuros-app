@@ -74,6 +74,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .placeholder, .product-image, .cart-thumb, .pick-thumb, .order-thumb { position: relative; display: flex; align-items: flex-end; padding: 14px; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); }
 .placeholder--wide { grid-column: span 2; }
 .hero-image { position: relative; grid-column: span 2; overflow: hidden; border: 1px solid var(--line); }
+.hero-collage-photo { position: relative; width: 100%; height: 100%; overflow: hidden; border: 1px solid var(--line); }
 .placeholder span, .image-label, .cart-thumb span { padding: 5px 9px; color: var(--faint); background: white; font: 11px/1.4 "IBM Plex Mono", monospace; }
 .placeholder span, .image-label { max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .benefits { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; padding: 60px 40px; background: var(--line); border: 1px solid var(--line); }
@@ -111,6 +112,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .farmers-heading h2 { margin: 0; font-size: 40px; font-weight: 500; }
 .farmer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
 .farmer .placeholder { aspect-ratio: 3/4; }
+.farmer-photo { position: relative; aspect-ratio: 3/4; overflow: hidden; border: 1px solid var(--line); }
 .farmer h3 { margin: 20px 0 0; font-size: 20px; font-weight: 500; font-family: "Anuphan", sans-serif; }
 .farmer small { display: block; margin-top: 5px; color: var(--faint); font-size: 13px; }
 .farmer p { margin: 14px 0 0; color: #5f6d65; font-size: 14px; line-height: 1.85; }
@@ -123,6 +125,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .membership { padding-block: 90px; }
 .membership-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
 .membership .placeholder { aspect-ratio: 5/4; }
+.membership-photo { position: relative; aspect-ratio: 5/4; overflow: hidden; border: 1px solid var(--line); }
 .membership h2 { margin: 0 0 20px; font-size: 42px; font-weight: 500; line-height: 1.3; }
 .membership p:not(.eyebrow) { margin: 0 0 32px; color: #48534c; font-size: 16px; line-height: 1.9; }
 .membership-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 30px; }

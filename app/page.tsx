@@ -9,10 +9,10 @@ const BENEFITS: [string, string, string][] = [
   ["๐๓", "ห่อเป็นของขวัญ", "กล่องกระดาษรีไซเคิล ซับกันกระแทก พร้อมการ์ดเขียนมือ"],
 ];
 
-const FARMERS: [string, string, string, string][] = [
-  ["พอร์ตเทรตชาวสวน ๙๐๐×๑๒๐๐", "ลุงคำ อินต๊ะ", "สวนส้ม อ.ฝาง เชียงใหม่ · ปลูกมา ๓๒ ปี", "“ส้มที่หวานจริงต้องรอให้มันสุกบนต้น ไม่ใช่สุกบนรถ”"],
-  ["พอร์ตเทรตพรีเซนเตอร์ ๙๐๐×๑๒๐๐", "ป้าสมทรง วงศ์แก้ว", "หัวหน้าฝ่ายคัดเกรด · ๑๒ ปีกับเรา", "“ลูกไหนที่ฉันไม่ให้ลูกตัวเองกิน ฉันก็ไม่ส่งให้ลูกค้า”"],
-  ["พอร์ตเทรตทีมแพ็ก ๙๐๐×๑๒๐๐", "พี่นัท ธนวัฒน์", "ห้องแพ็กกรุงเทพฯ · ดูแลทุกกล่องก่อนออก", "“ผมนับลูกซ้ำสองรอบเสมอ กล่องหนึ่งคือความตั้งใจของคนสิบคน”"],
+const FARMERS: { label: string; name: string; role: string; quote: string; img: string }[] = [
+  { label: "พอร์ตเทรตชาวสวน ๙๐๐×๑๒๐๐", name: "ลุงคำ อินต๊ะ", role: "สวนส้ม อ.ฝาง เชียงใหม่ · ปลูกมา ๓๒ ปี", quote: "“ส้มที่หวานจริงต้องรอให้มันสุกบนต้น ไม่ใช่สุกบนรถ”", img: "/img/index/uncle-presenter.png" },
+  { label: "พอร์ตเทรตพรีเซนเตอร์ ๙๐๐×๑๒๐๐", name: "ป้าสมทรง วงศ์แก้ว", role: "หัวหน้าฝ่ายคัดเกรด · ๑๒ ปีกับเรา", quote: "“ลูกไหนที่ฉันไม่ให้ลูกตัวเองกิน ฉันก็ไม่ส่งให้ลูกค้า”", img: "/img/index/aun-presenter.png" },
+  { label: "พอร์ตเทรตทีมแพ็ก ๙๐๐×๑๒๐๐", name: "พี่นัท ธนวัฒน์", role: "ห้องแพ็กกรุงเทพฯ · ดูแลทุกกล่องก่อนออก", quote: "“ผมนับลูกซ้ำสองรอบเสมอ กล่องหนึ่งคือความตั้งใจของคนสิบคน”", img: "/img/index/girl-presenter.png" },
 ];
 
 export default function HomePage() {
@@ -65,12 +65,15 @@ export default function HomePage() {
           <h2>เราซื้อจากคนที่เรารู้จักชื่อ</h2>
         </div>
         <div className="farmer-grid">
-          {FARMERS.map(([label, name, role, quote]) => (
-            <div className="farmer" key={name}>
-              <div className="placeholder"><span>{label}</span></div>
-              <h3>{name}</h3>
-              <small>{role}</small>
-              <p>{quote}</p>
+          {FARMERS.map((farmer) => (
+            <div className="farmer" key={farmer.name}>
+              {/* <div className="placeholder"><span>{farmer.label}</span></div> */}
+              <div className="farmer-photo">
+                <Image src={farmer.img} alt={farmer.name} fill sizes="(max-width: 820px) 100vw, 33vw" style={{ objectFit: "cover" }} />
+              </div>
+              <h3>{farmer.name}</h3>
+              <small>{farmer.role}</small>
+              <p>{farmer.quote}</p>
             </div>
           ))}
         </div>
@@ -83,7 +86,10 @@ export default function HomePage() {
       </section>
       <section className="membership section">
         <div className="membership-inner">
-          <div className="placeholder"><span>กล่องของขวัญเปิดฝา ๑๒๐๐×๙๖๐</span></div>
+          {/* <div className="placeholder"><span>กล่องของขวัญเปิดฝา ๑๒๐๐×๙๖๐</span></div> */}
+          <div className="membership-photo">
+            <Image src="/img/index/fruit-premium-1.png" alt="กล่องของขวัญเปิดฝา" fill sizes="(max-width: 820px) 100vw, 50vw" style={{ objectFit: "cover" }} />
+          </div>
           <div>
             <p className="eyebrow">สมาชิกรายเดือน</p>
             <h2>ให้เราเลือกของดีที่สุดของเดือนให้คุณ</h2>
