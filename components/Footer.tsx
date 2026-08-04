@@ -6,28 +6,30 @@ export default function Footer() {
       <div className="footer-inner">
         <div className="footer-brand">
           <strong>มธุรส</strong>
-          <small>MATHUROS</small>
-          <p>ผลไม้คัดพิเศษ จากสวนที่เราไว้ใจ ส่งตรงถึงบ้านคุณ</p>
+          <p>ผลไม้คัดเกรดพรีเมียม ส่งตรงจากสวนพันธมิตร ๑๘ แห่งทั่วประเทศไทย</p>
         </div>
         <div>
-          <strong>เลือกซื้อ</strong>
+          <strong>สินค้า</strong>
           <Link href="/list">ผลไม้ตามฤดู</Link>
           <Link href="/list">กล่องของขวัญ</Link>
-          <Link href="/track">ติดตามคำสั่งซื้อ</Link>
+          <span>สมาชิกรายเดือน</span>
         </div>
         <div>
-          <strong>รู้จักเรา</strong>
-          <Link href="/story">เรื่องราวของสวน</Link>
-          <button>มาตรฐานการคัด</button>
-          <button>คำถามที่พบบ่อย</button>
+          <strong>ช่วยเหลือ</strong>
+          <button>การจัดส่ง</button>
+          <button>คืนสินค้า</button>
+          <button>ติดต่อเรา</button>
         </div>
         <div>
-          <strong>ติดต่อ</strong>
+          <strong>ติดตาม</strong>
           <span>LINE @mathuros</span>
-          <span>02-123-4567</span>
-          <span>ทุกวัน 08:00–20:00</span>
+          <span>Instagram</span>
+          <span>Facebook</span>
         </div>
-        <p className="copyright">© ๒๕๖๙ มธุรส ฟรุตส์ · กรุงเทพฯ ประเทศไทย</p>
+      </div>
+      <div className="footer-bottom">
+        <span>© ๒๕๖๙ MATHUROS FRUIT CO., LTD.</span>
+        <span>นโยบายความเป็นส่วนตัว · เงื่อนไขการใช้งาน</span>
       </div>
     </footer>
   );

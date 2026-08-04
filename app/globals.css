@@ -29,8 +29,8 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .nav button, .nav a, .login-link { padding: 4px 0; border: 0; border-bottom: 1px solid transparent; background: none; cursor: pointer; font-size: 14px; white-space: nowrap; }
 .nav button:hover, .nav a:hover, .login-link:hover { color: var(--orange); border-bottom-color: var(--orange); }
 .brand { border: 0; background: none; text-align: center; cursor: pointer; }
-.brand strong, .footer-brand > strong { display: block; font: 600 27px/1 "Anuphan", sans-serif; letter-spacing: .04em; }
-.brand small, .footer-brand > small { display: block; margin-top: 6px; padding-left: 5px; color: var(--faint); font: 9px/1 "IBM Plex Mono", monospace; letter-spacing: .42em; }
+.brand strong { display: block; font: 600 27px/1 "Anuphan", sans-serif; letter-spacing: .04em; }
+.brand small { display: block; margin-top: 6px; padding-left: 5px; color: var(--faint); font: 9px/1 "IBM Plex Mono", monospace; letter-spacing: .42em; }
 .header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 25px; }
 .cart-button { display: flex; align-items: center; gap: 9px; padding: 9px 18px; border: 1px solid var(--ink); border-radius: 999px; background: white; cursor: pointer; font-size: 14px; }
 .cart-button:hover { color: white; background: var(--ink); }
@@ -267,17 +267,16 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .form-grid .full { grid-column: span 2; }
 .form-grid input, .auth-modal input { width: 100%; padding: 13px 14px; border: 1px solid #c2cfc1; border-radius: 0; background: white; }
 
-footer { padding-block: 58px 82px; color: #d7dfd7; background: var(--ink); }
-.footer-inner { position: relative; width: min(1440px, 100%); margin-inline: auto; padding-inline: 40px; display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 50px; }
-.footer-brand > strong { color: white; }
-.footer-brand > small { color: #87938b; }
-.footer-brand p { max-width: 280px; color: #9fa9a1; line-height: 1.8; }
-.footer-inner > div:not(.footer-brand) { display: flex; flex-direction: column; align-items: flex-start; gap: 10px; font-size: 13px; }
-.footer-inner > div:not(.footer-brand) > strong { margin-bottom: 8px; color: white; }
-footer button, footer a { padding: 0; color: #9fa9a1; border: 0; background: none; cursor: pointer; }
-footer button:hover, footer a:hover { color: white; }
-footer span { color: #9fa9a1; }
-.copyright { position: absolute; left: 40px; bottom: 20px; color: #68736b; font: 10px "IBM Plex Mono", monospace; }
+footer { color: #9caaa1; background: var(--ink); }
+.footer-inner { width: min(1440px, 100%); margin-inline: auto; padding: 70px 40px 40px; display: grid; grid-template-columns: 1.6fr repeat(3, 1fr); gap: 50px; }
+.footer-brand > strong { display: block; margin-bottom: 14px; font: 400 26px/1 "Anuphan", sans-serif; color: #eaf1e9; }
+.footer-brand p { max-width: 300px; margin: 0; color: #9caaa1; line-height: 1.9; }
+.footer-inner > div:not(.footer-brand) { display: grid; gap: 12px; align-content: start; font-size: 14px; }
+.footer-inner > div:not(.footer-brand) > strong { margin-bottom: 4px; color: #eaf1e9; font: 13px "IBM Plex Mono", monospace; letter-spacing: .12em; }
+footer button, footer a { padding: 0; color: #9caaa1; border: 0; background: none; cursor: pointer; text-align: left; }
+footer button:hover, footer a:hover { color: #eaf1e9; }
+footer span { color: #9caaa1; }
+.footer-bottom { width: min(1440px, 100%); margin-inline: auto; padding: 24px 40px 40px; border-top: 1px solid #24322a; display: flex; justify-content: space-between; font-size: 12px; font-family: "IBM Plex Mono", monospace; }
 
 .assistant { position: fixed; z-index: 60; right: 28px; bottom: 28px; width: auto; height: auto; border-radius: 999px; background: none; box-shadow: none; overflow: hidden; transition: width .25s ease, height .25s ease, border-radius .25s ease; }
 .assistant:not(.assistant--open) { overflow: visible; }
@@ -402,5 +401,5 @@ footer span { color: #9fa9a1; }
   .form-grid { grid-template-columns: 1fr; }
   .form-grid .full { grid-column: auto; }
   .footer-inner { grid-template-columns: 1fr; padding-inline: 25px; }
-  .copyright { left: 25px; }
+  .footer-bottom { padding-inline: 25px; flex-direction: column; gap: 8px; }
 }
