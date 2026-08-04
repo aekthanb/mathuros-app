@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "../lib/data";
 import ProductSection from "../components/ProductSection";
+import VideoPromo from "../components/VideoPromo";
 
 const BENEFITS: [string, string, string][] = [
   ["๐๑", "ตัดเช้า ส่งเย็น", "ผลไม้ออกจากสวนในวันเดียวกับที่คุณสั่ง ไม่ผ่านห้องเย็นค้างคืน"],
@@ -54,17 +55,7 @@ export default function HomePage() {
         ))}
       </section>
       <ProductSection products={PRODUCTS.slice(0, 6)} />
-      <section className="section video-promo">
-        <div className="video-promo-inner">
-          <div>
-            <p className="eyebrow">ภาพยนตร์สั้น ๓ นาที</p>
-            <h2>หนึ่งวันในสวน<br />ก่อนผลไม้จะถึงมือคุณ</h2>
-            <p>ตามไปดูตั้งแต่ตีห้าที่แสงแรกลงบนใบ จนถึงตอนที่กล่องสุดท้ายถูกปิดเทป</p>
-            <button className="pill">เล่นวิดีโอ</button>
-          </div>
-          <div className="video-frame"><span>วิดีโอ 16:9 — สารคดีสวน (รอไฟล์)</span></div>
-        </div>
-      </section>
+      <VideoPromo />
       <section className="farmers section">
         <div className="farmers-heading">
           <p className="eyebrow">คนที่อยู่เบื้องหลัง</p>
