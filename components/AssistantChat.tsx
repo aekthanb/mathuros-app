@@ -31,7 +31,7 @@ export default function AssistantChat() {
       ) : (
         <button className="assistant-head" onClick={() => setChatOpen(true)}>
           <span className="assistant-head__dot" />
-          <span>ผู้ช่วยเลือกผลไม้</span>
+          <span>ให้ AI ช่วยเลือกผลไม้</span>
         </button>
       )}
       {chatOpen && (
