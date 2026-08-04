@@ -14,8 +14,6 @@ export default function AuthModal() {
   const router = useRouter();
   const { authOpen, setAuthOpen, authMode, setAuthMode, authName, setAuthName, login } = useStore();
 
-  if (!authOpen) return null;
-
   function submit() {
     login(authName.trim() || "คุณลูกค้า");
     setAuthOpen(false);
@@ -23,7 +21,7 @@ export default function AuthModal() {
   }
 
   return (
-    <div className="modal-backdrop" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setAuthOpen(false); }}>
+    <div className={`modal-backdrop${authOpen ? " modal-backdrop--open" : ""}`} role="presentation" aria-hidden={!authOpen} onMouseDown={(event) => { if (event.target === event.currentTarget) setAuthOpen(false); }}>
       <div className="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-title">
         <div className="auth-modal__intro">
           <p className="eyebrow">สมาชิกมธุรส</p>

@@ -392,8 +392,10 @@ footer span { color: #9caaa1; }
 .chat-input button { padding: 13px 22px; color: white; border: 0; background: var(--ink); cursor: pointer; font-size: 14px; white-space: nowrap; }
 .chat-input button:hover { background: var(--green); }
 
-.modal-backdrop { position: fixed; z-index: 200; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 40px; overflow-y: auto; background: rgba(23,32,26,.42); }
-.auth-modal { width: 880px; max-width: 100%; margin: auto; display: grid; grid-template-columns: 1fr 1fr; background: white; border: 1px solid var(--line); }
+.modal-backdrop { position: fixed; z-index: 200; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 40px; overflow-y: auto; background: rgba(23,32,26,.42); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s; }
+.modal-backdrop--open { opacity: 1; visibility: visible; }
+.auth-modal { width: 880px; max-width: 100%; margin: auto; display: grid; grid-template-columns: 1fr 1fr; background: white; border: 1px solid var(--line); transform: translateY(16px) scale(.98); transition: transform .3s ease; }
+.modal-backdrop--open .auth-modal { transform: translateY(0) scale(1); }
 .auth-modal__intro { padding: 44px; background: var(--wash); border-right: 1px solid var(--line); }
 .auth-modal__intro .eyebrow { margin-bottom: 20px; }
 .auth-modal__intro h2 { margin: 0 0 26px; font: 500 30px/1.4 "Anuphan", sans-serif; }
