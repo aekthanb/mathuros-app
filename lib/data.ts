@@ -11,6 +11,7 @@ export type Product = {
   description: string;
   label: string;
   badge?: string;
+  image?: string;
 };
 
 export type Message = {
@@ -34,6 +35,7 @@ export const PRODUCTS: Product[] = [
       "เนื้อแน่น กรอบ น้ำเยอะ ความหวานคมแต่ไม่เลี่ยน คัดเฉพาะลูกที่ผิวเนียนไร้ตำหนิและวัดได้ ๑๕ Brix ขึ้นไป ห่อกระดาษทีละลูกก่อนลงกล่อง",
     label: "แอปเปิ้ลฟูจิ 800×1000",
     badge: "ใหม่",
+    image: "/img/list/apple.png",
   },
   {
     sku: "som",
@@ -48,6 +50,7 @@ export const PRODUCTS: Product[] = [
     description:
       "เปลือกบาง แกะง่าย เนื้อฉ่ำ หวานอมเปรี้ยว เก็บจากสวนในช่วงเช้าและส่งเข้าห้องคัดภายในวันเดียวกัน",
     label: "ส้มสายน้ำผึ้ง 800×1000",
+    image: "/img/list/orange.png",
   },
   {
     sku: "mango",
@@ -63,6 +66,7 @@ export const PRODUCTS: Product[] = [
       "คัดลูกที่แก่จัดคาต้น บ่มด้วยอุณหภูมิควบคุมให้สุกพอดีวันที่ถึงมือคุณ เนื้อละเอียด ไม่มีเสี้ยน หวานหอมแบบมะม่วงไทยแท้",
     label: "มะม่วงน้ำดอกไม้ 800×1000",
     badge: "ขายดี",
+    image: "/img/list/mango.png",
   },
   {
     sku: "grape",
