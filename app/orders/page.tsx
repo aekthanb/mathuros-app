@@ -3,12 +3,12 @@ import { ORDER_HISTORY } from "../../lib/data";
 
 export default function OrdersPage() {
   return (
-    <main className="orders-page page-section">
+    <main className="account-page page-section">
       <div className="page-heading">
         <div>
           <p className="eyebrow">บัญชีของฉัน</p>
           <h1>ประวัติการสั่งซื้อ</h1>
-          <div className="orders-stats">สั่งทั้งหมด ๖ ครั้ง · ยอดสะสม ฿7,340 · แต้มคงเหลือ ๗๓ แต้ม</div>
+          <div className="heading-meta">สั่งทั้งหมด ๖ ครั้ง · ยอดสะสม ฿7,340 · แต้มคงเหลือ ๗๓ แต้ม</div>
         </div>
         <div className="order-filters">
           <button className="active">ทั้งหมด</button>
