@@ -328,7 +328,7 @@ footer span { color: #9caaa1; }
 .auth-tabs { display: flex; gap: 26px; margin-bottom: 30px; border-bottom: 1px solid var(--line); }
 .auth-tabs button { padding: 0 0 12px; border: 0; border-bottom: 2px solid transparent; background: none; cursor: pointer; }
 .auth-tabs button.active { border-color: var(--ink); }
-.auth-fields { display: grid; gap: 14px; }
+.auth-fields { display: grid; align-content: start; gap: 14px; min-height: 271px; }
 .auth-field span { display: block; margin-bottom: 7px; color: var(--faint); font-size: 12px; }
 .auth-field input { width: 100%; padding: 14px 16px; border: 1px solid #c2cfc1; background: white; font-size: 15px; font-family: inherit; color: var(--ink); outline: none; }
 .auth-field input:focus { border-color: var(--ink); }
