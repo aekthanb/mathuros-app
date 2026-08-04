@@ -41,12 +41,20 @@ export default function AuthModal() {
             <button className={authMode === "login" ? "active" : ""} onClick={() => setAuthMode("login")}>เข้าสู่ระบบ</button>
           </div>
           <div className="auth-fields">
-            {authMode === "register" && (
-              <label className="auth-field">
-                <span>ชื่อ–นามสกุล</span>
-                <input value={authName} onChange={(event) => setAuthName(event.target.value)} placeholder="เช่น ปิยะดา ส." />
-              </label>
-            )}
+            <div className={`auth-field-collapse${authMode === "register" ? "" : " auth-field-collapse--closed"}`}>
+              <div className="auth-field-collapse__inner">
+                <label className="auth-field">
+                  <span>ชื่อ–นามสกุล</span>
+                  <input
+                    value={authName}
+                    onChange={(event) => setAuthName(event.target.value)}
+                    placeholder="เช่น ปิยะดา ส."
+                    tabIndex={authMode === "register" ? 0 : -1}
+                    aria-hidden={authMode !== "register"}
+                  />
+                </label>
+              </div>
+            </div>
             <label className="auth-field">
               <span>เบอร์โทรศัพท์</span>
               <input inputMode="tel" placeholder="08X-XXX-XXXX" />

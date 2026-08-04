@@ -404,11 +404,14 @@ footer span { color: #9caaa1; }
 .modal-close { position: absolute; top: 20px; right: 24px; border: 0; background: none; cursor: pointer; color: var(--faint); font-size: 22px; line-height: 1; }
 .modal-close:hover { color: var(--ink); }
 .auth-tabs { display: flex; gap: 26px; margin-bottom: 30px; border-bottom: 1px solid var(--line); }
-.auth-tabs button { padding: 0 0 12px; border: 0; border-bottom: 2px solid transparent; background: none; cursor: pointer; }
-.auth-tabs button.active { border-color: var(--ink); }
-.auth-fields { display: grid; align-content: start; gap: 14px; min-height: 271px; }
+.auth-tabs button { padding: 0 0 12px; border: 0; border-bottom: 2px solid transparent; background: none; color: var(--faint); cursor: pointer; transition: border-color .25s ease, color .25s ease; }
+.auth-tabs button.active { border-color: var(--ink); color: var(--ink); }
+.auth-fields { display: flex; flex-direction: column; gap: 14px; align-content: start; min-height: 271px; }
+.auth-field-collapse { display: grid; grid-template-rows: 1fr; opacity: 1; transition: grid-template-rows .3s ease, opacity .25s ease; }
+.auth-field-collapse--closed { grid-template-rows: 0fr; opacity: 0; }
+.auth-field-collapse__inner { overflow: hidden; min-height: 0; }
 .auth-field span { display: block; margin-bottom: 7px; color: var(--faint); font-size: 12px; }
-.auth-field input { width: 100%; padding: 14px 16px; border: 1px solid #c2cfc1; background: white; font-size: 15px; font-family: inherit; color: var(--ink); outline: none; }
+.auth-field input { width: 100%; padding: 14px 16px; border: 1px solid #c2cfc1; background: white; font-size: 15px; font-family: inherit; color: var(--ink); outline: none; transition: border-color .2s ease; }
 .auth-field input:focus { border-color: var(--ink); }
 .auth-modal__form > .button { width: 100%; margin-top: 24px; }
 .auth-divider { display: flex; align-items: center; gap: 14px; margin: 22px 0; color: var(--faint); font-size: 12px; }
