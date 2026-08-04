@@ -13,8 +13,8 @@
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; overflow-x: hidden; }
-body { margin: 0; overflow-x: hidden; color: var(--ink); background: var(--white); font-family: "IBM Plex Sans Thai", sans-serif; }
+html { scroll-behavior: smooth; overflow-x: clip; }
+body { margin: 0; overflow-x: clip; color: var(--ink); background: var(--white); font-family: "IBM Plex Sans Thai", sans-serif; }
 button, input { font: inherit; }
 button { color: inherit; }
 a { color: inherit; text-decoration: none; }
