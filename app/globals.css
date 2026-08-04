@@ -84,6 +84,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .section-heading, .page-heading { display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; margin-bottom: 40px; padding-bottom: 22px; border-bottom: 1px solid var(--line); }
 .section-heading h2 { margin: 0; font-size: 40px; font-weight: 500; }
 .section-heading button, .section-heading a { border: 0; background: none; cursor: pointer; color: #5f6d65; }
+.section-heading button:hover, .section-heading a:hover { color: var(--ink); }
 .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 38px 25px; }
 .product-card { min-width: 0; padding: 0; border: 0; background: none; text-align: left; cursor: pointer; }
 .product-image { width: 100%; aspect-ratio: 4/5; }
