@@ -81,6 +81,7 @@ export const PRODUCTS: Product[] = [
     description:
       "ผลใหญ่ กรอบ ไร้เมล็ด กินได้ทั้งเปลือก กลิ่นหอมมัสแคทชัดเจน คัดเฉพาะพวงที่ผลเรียงสวยและสีสม่ำเสมอทั้งพวง",
     label: "องุ่นไชน์มัสแคท 800×1000",
+    image: "/img/list/grape.png",
   },
   {
     sku: "durian",
@@ -95,6 +96,7 @@ export const PRODUCTS: Product[] = [
     description:
       "ตัดที่ความแก่ ๘๕% วัดน้ำหนักแป้งทุกลูกก่อนส่ง เนื้อแห้ง หนึบ หวานมัน แกะพูใส่กล่องสุญญากาศให้พร้อมทาน",
     label: "ทุเรียนหมอนทอง 800×1000",
+    image: "/img/list/durain.png",
   },
   {
     sku: "straw",
@@ -109,6 +111,7 @@ export const PRODUCTS: Product[] = [
     description:
       "เก็บตอนเช้ามืดขณะอากาศยังเย็น ลงกล่องควบคุมอุณหภูมิทันทีในสวน ผลแดงทั้งลูก หอม หวานอมเปรี้ยว",
     label: "สตรอว์เบอร์รีพันธุ์ ๘๐ 800×1000",
+    image: "/img/list/storberry.png",
   },
   {
     sku: "longan",
@@ -123,6 +126,7 @@ export const PRODUCTS: Product[] = [
     description:
       "ผลใหญ่ เนื้อหนา เมล็ดเล็ก ตัดเป็นช่อเพื่อรักษาความสดได้นานกว่าลำไยร่วง",
     label: "ลำไยอีดอ 800×1000",
+    image: "/img/list/longan.png",
   },
   {
     sku: "pomelo",
