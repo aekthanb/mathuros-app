@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { PRODUCTS } from "../lib/data";
 import ProductSection from "../components/ProductSection";
@@ -33,7 +34,10 @@ export default function HomePage() {
           </div>
         </div>
         <div className="hero-collage">
-          <div className="placeholder placeholder--wide"><span>hero — ตะกร้าผลไม้จัดพรีเมียม 1200×600</span></div>
+          {/* <div className="placeholder placeholder--wide"><span>hero — ตะกร้าผลไม้จัดพรีเมียม 1200×600</span></div> */}
+          <div className="hero-image">
+            <Image src="/img/index/hero_img.png" alt="ตะกร้าผลไม้จัดพรีเมียม" fill sizes="(max-width: 820px) 100vw, 720px" style={{ objectFit: "cover" }} priority />
+          </div>
           <div className="placeholder"><span>พรีเซนเตอร์ — ครึ่งตัว</span></div>
           <div className="placeholder"><span>มือคัดผลไม้ close-up</span></div>
         </div>
