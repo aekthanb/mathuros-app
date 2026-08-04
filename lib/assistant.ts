@@ -17,7 +17,7 @@ export function getReply(text: string): Message {
       role: "assistant",
       text: "สัปดาห์นี้ค่าความหวานสูงสุดอยู่ที่สองตัวนี้ค่ะ วัดจากล็อตที่เพิ่งเข้าห้องคัดเมื่อเช้า",
       picks: [
-        { sku: "durian", reason: "๓๐–๓๒ Brix เนื้อแห้ง หนึบ หวานมัน" },
+        { sku: "kiwi", reason: "๑๔–๑๖ Brix เนื้อสีทอง ฉ่ำ หวานนำเปรี้ยวเบา" },
         { sku: "longan", reason: "๑๙–๒๑ Brix เนื้อหนา เมล็ดเล็ก" },
       ],
     };
