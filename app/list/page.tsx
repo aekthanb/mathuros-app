@@ -1,7 +1,14 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { PRODUCTS } from "../../lib/data";
 import ProductCard from "../../components/ProductCard";
+import { useStore } from "../../components/StoreProvider";
 
 export default function ListPage() {
+  const router = useRouter();
+  const { addToCart } = useStore();
+
   return (
     <main className="section page-section">
       <p className="eyebrow">เก็บเกี่ยวประจำสัปดาห์</p>
@@ -18,6 +25,13 @@ export default function ListPage() {
       </div>
       <div className="product-grid product-grid--all">
         {PRODUCTS.map((item) => <ProductCard key={item.sku} product={item} />)}
+      </div>
+      <div className="special-box">
+        <div>
+          <h2>กล่องคัดพิเศษของสัปดาห์นี้</h2>
+          <p>ทีมคัดเกรดจัดให้เองจากผลไม้ที่ดีที่สุดของสัปดาห์ ส่งฟรีทุกกล่อง</p>
+        </div>
+        <button className="button button--dark pill" onClick={() => { addToCart(1); router.push("/cart"); }}>สั่งกล่องนี้ ฿1,490</button>
       </div>
     </main>
   );
