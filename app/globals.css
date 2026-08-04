@@ -278,19 +278,20 @@ footer button:hover, footer a:hover { color: #eaf1e9; }
 footer span { color: #9caaa1; }
 .footer-bottom { width: min(1440px, 100%); margin-inline: auto; padding: 24px 40px 40px; border-top: 1px solid #24322a; display: flex; justify-content: space-between; font-size: 12px; font-family: "IBM Plex Mono", monospace; }
 
-.assistant { position: fixed; z-index: 60; right: 28px; bottom: 28px; width: auto; height: auto; border-radius: 999px; background: none; box-shadow: none; overflow: hidden; transition: width .25s ease, height .25s ease, border-radius .25s ease; }
-.assistant:not(.assistant--open) { overflow: visible; }
-.assistant--open { width: 360px; height: min(640px, calc(100vh - 56px)); border-radius: 20px; background: white; box-shadow: 0 24px 60px rgba(23,32,26,.28); display: flex; flex-direction: column; }
-.assistant-head { width: 100%; padding: 22px 24px; display: flex; align-items: center; gap: 12px; border: 0; border-bottom: 1px solid var(--line); background: white; }
-.assistant:not(.assistant--open) .assistant-head { width: auto; padding: 0 22px 0 18px; height: 56px; justify-content: center; border-radius: 999px; border-bottom: 0; color: white; background: var(--ink); box-shadow: 0 10px 30px rgba(23,32,26,.22); cursor: pointer; }
+.assistant { position: fixed; z-index: 60; right: 28px; bottom: 28px; width: 208px; height: 56px; border-radius: 999px; background: var(--ink); box-shadow: 0 10px 30px rgba(23,32,26,.22); overflow: hidden; transition: width .3s ease, height .3s ease, border-radius .3s ease, background .3s ease, box-shadow .3s ease; }
+.assistant--open { width: 360px; height: min(640px, calc(100vh - 56px)); border-radius: 20px; background: white; box-shadow: 0 24px 60px rgba(23,32,26,.28); }
+.assistant-trigger { position: absolute; inset: 0; padding: 0 22px 0 18px; display: flex; align-items: center; justify-content: center; gap: 12px; border: 0; background: none; color: white; cursor: pointer; white-space: nowrap; font-size: 14px; opacity: 1; transition: opacity .2s ease; }
+.assistant--open .assistant-trigger { opacity: 0; pointer-events: none; }
+.assistant-trigger .assistant-head__dot { background: var(--orange); }
+.assistant-panel { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+.assistant--open .assistant-panel { opacity: 1; pointer-events: auto; transition-delay: .1s; }
+.assistant-head { width: 100%; padding: 22px 24px; display: flex; align-items: center; gap: 12px; border: 0; border-bottom: 1px solid var(--line); background: white; flex-shrink: 0; }
 .assistant-head__dot { width: 8px; height: 8px; flex-shrink: 0; border-radius: 50%; background: var(--green); }
-.assistant:not(.assistant--open) .assistant-head__dot { background: var(--orange); }
 .assistant-head__title { flex: 1; text-align: left; }
 .assistant-head__title strong { display: block; font-size: 15px; font-weight: 400; }
 .assistant-head__title small { display: block; margin-top: 4px; color: var(--faint); font: 10px "IBM Plex Mono", monospace; letter-spacing: .2em; }
 .assistant-close { border: 0; padding: 4px 6px; color: var(--faint); background: none; cursor: pointer; font-size: 20px; line-height: 1; }
 .assistant-close:hover { color: var(--ink); }
-.assistant:not(.assistant--open) .assistant-head span { font-size: 14px; white-space: nowrap; }
 .messages { flex: 1; padding: 24px; display: flex; flex-direction: column; gap: 18px; overflow-y: auto; }
 .message p { margin: 0; padding: 13px 14px; border: 1px solid var(--line); border-radius: 4px; background: var(--wash); font-size: 13px; line-height: 1.75; }
 .message--user { display: flex; justify-content: flex-end; }
@@ -302,7 +303,7 @@ footer span { color: #9caaa1; }
 .pick-info strong { font: 500 16px "Anuphan", sans-serif; }
 .pick-info small { margin-top: 5px; color: var(--faint); font-size: 12px; line-height: 1.6; }
 .pick b { font: 13px "IBM Plex Mono", monospace; white-space: nowrap; }
-.assistant-footer { padding: 16px 24px 22px; border-top: 1px solid var(--line); }
+.assistant-footer { flex-shrink: 0; padding: 16px 24px 22px; border-top: 1px solid var(--line); }
 .quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
 .quick-prompts button { padding: 6px 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: white; cursor: pointer; font-size: 12px; }
 .quick-prompts button:hover { border-color: var(--ink); color: var(--ink); }
