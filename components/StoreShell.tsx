@@ -5,6 +5,7 @@ import Header from "./Header";
 import Footer from "./Footer";
 import AssistantChat from "./AssistantChat";
 import AuthModal from "./AuthModal";
+import BackToTop from "./BackToTop";
 
 export default function StoreShell({ children }: { children: React.ReactNode }) {
   return (
@@ -18,6 +19,7 @@ export default function StoreShell({ children }: { children: React.ReactNode }) 
         </div>
         <AssistantChat />
         <AuthModal />
+        <BackToTop />
       </div>
     </StoreProvider>
   );
