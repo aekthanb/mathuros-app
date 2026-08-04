@@ -8,6 +8,12 @@ const BENEFITS: [string, string, string][] = [
   ["๐๓", "ห่อเป็นของขวัญ", "กล่องกระดาษรีไซเคิล ซับกันกระแทก พร้อมการ์ดเขียนมือ"],
 ];
 
+const FARMERS: [string, string, string, string][] = [
+  ["พอร์ตเทรตชาวสวน ๙๐๐×๑๒๐๐", "ลุงคำ อินต๊ะ", "สวนส้ม อ.ฝาง เชียงใหม่ · ปลูกมา ๓๒ ปี", "“ส้มที่หวานจริงต้องรอให้มันสุกบนต้น ไม่ใช่สุกบนรถ”"],
+  ["พอร์ตเทรตพรีเซนเตอร์ ๙๐๐×๑๒๐๐", "ป้าสมทรง วงศ์แก้ว", "หัวหน้าฝ่ายคัดเกรด · ๑๒ ปีกับเรา", "“ลูกไหนที่ฉันไม่ให้ลูกตัวเองกิน ฉันก็ไม่ส่งให้ลูกค้า”"],
+  ["พอร์ตเทรตทีมแพ็ก ๙๐๐×๑๒๐๐", "พี่นัท ธนวัฒน์", "ห้องแพ็กกรุงเทพฯ · ดูแลทุกกล่องก่อนออก", "“ผมนับลูกซ้ำสองรอบเสมอ กล่องหนึ่งคือความตั้งใจของคนสิบคน”"],
+];
+
 export default function HomePage() {
   return (
     <main>
@@ -38,13 +44,49 @@ export default function HomePage() {
         ))}
       </section>
       <ProductSection products={PRODUCTS.slice(0, 6)} />
-      <section className="editorial section">
-        <div className="placeholder"><span>สวนส้มฝาง — เช้าก่อนเก็บเกี่ยว</span></div>
-        <div>
-          <p className="eyebrow">จากสวนถึงมือคุณ</p>
-          <h2>เราไม่ได้เลือกแค่ผลไม้<br />เราเลือกคนที่ปลูกมันด้วย</h2>
-          <p>ทุกสวนที่ร่วมงานกับมธุรส เราเข้าไปดูด้วยตัวเอง ตั้งแต่วิธีดูแลดิน วันที่เก็บ ไปจนถึงเวลาที่รถออกจากสวน</p>
-          <Link className="text-link" href="/story">อ่านเรื่องราวของเรา →</Link>
+      <section className="section video-promo">
+        <div className="video-promo-inner">
+          <div>
+            <p className="eyebrow">ภาพยนตร์สั้น ๓ นาที</p>
+            <h2>หนึ่งวันในสวน<br />ก่อนผลไม้จะถึงมือคุณ</h2>
+            <p>ตามไปดูตั้งแต่ตีห้าที่แสงแรกลงบนใบ จนถึงตอนที่กล่องสุดท้ายถูกปิดเทป</p>
+            <button className="pill">เล่นวิดีโอ</button>
+          </div>
+          <div className="video-frame"><span>วิดีโอ 16:9 — สารคดีสวน (รอไฟล์)</span></div>
+        </div>
+      </section>
+      <section className="farmers section">
+        <div className="farmers-heading">
+          <p className="eyebrow">คนที่อยู่เบื้องหลัง</p>
+          <h2>เราซื้อจากคนที่เรารู้จักชื่อ</h2>
+        </div>
+        <div className="farmer-grid">
+          {FARMERS.map(([label, name, role, quote]) => (
+            <div className="farmer" key={name}>
+              <div className="placeholder"><span>{label}</span></div>
+              <h3>{name}</h3>
+              <small>{role}</small>
+              <p>{quote}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+      <section className="testimonial">
+        <div className="testimonial-inner">
+          <p>“สั่งให้แม่ที่ต่างจังหวัดครั้งแรกเพราะไปหาไม่ได้ ตอนนี้กลายเป็นของประจำเดือน แม่บอกว่าส้มกล่องนี้หวานเหมือนสมัยยังเด็ก”</p>
+          <span>ปิยะดา ส. — ลูกค้าตั้งแต่ปี ๒๕๖๖</span>
+        </div>
+      </section>
+      <section className="membership section">
+        <div className="membership-inner">
+          <div className="placeholder"><span>กล่องของขวัญเปิดฝา ๑๒๐๐×๙๖๐</span></div>
+          <div>
+            <p className="eyebrow">สมาชิกรายเดือน</p>
+            <h2>ให้เราเลือกของดีที่สุดของเดือนให้คุณ</h2>
+            <p>ทุกต้นเดือนเราจะจัดกล่องจากผลไม้ที่ดีที่สุดในฤดูนั้น พร้อมจดหมายเล่าว่ามาจากสวนไหน ใครเป็นคนปลูก ยกเลิกได้ทุกเมื่อ</p>
+            <div className="membership-price"><strong>฿1,490</strong><span>/ เดือน · ส่งฟรี</span></div>
+            <button className="button button--green pill">สมัครสมาชิก</button>
+          </div>
         </div>
       </section>
     </main>

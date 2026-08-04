@@ -60,6 +60,8 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .button--outline { border-color: #c2cfc1; background: white; }
 .button--outline:hover { border-color: var(--ink); }
 .button--light { background: white; }
+.button--green { color: white; background: var(--green); }
+.button--green:hover { background: var(--ink); }
 .pill { border-radius: 999px; padding-inline: 37px; }
 .text-link { padding: 10px 2px; border: 0; border-bottom: 1px solid #c2cfc1; background: none; cursor: pointer; }
 .text-link:hover { color: var(--orange); border-bottom-color: var(--orange); }
@@ -68,7 +70,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .stats strong { font: 30px "Anuphan", sans-serif; }
 .stats span { margin-top: 4px; color: var(--faint); font-size: 13px; }
 .hero-collage { display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 300px 200px; gap: 14px; }
-.hero > *, .hero-collage > *, .product-detail > *, .editorial > *, .story-copy > * { min-width: 0; }
+.hero > *, .hero-collage > *, .product-detail > *, .video-promo-inner > *, .farmer-grid > *, .membership-inner > *, .story-copy > * { min-width: 0; }
 .placeholder, .product-image, .cart-thumb, .pick-thumb { position: relative; display: flex; align-items: flex-end; padding: 14px; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); }
 .placeholder--wide { grid-column: span 2; }
 .placeholder span, .image-label, .cart-thumb span { padding: 5px 9px; color: var(--faint); background: white; font: 11px/1.4 "IBM Plex Mono", monospace; }
@@ -92,10 +94,38 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .product-card__title strong { font: 500 20px "Anuphan", sans-serif; }
 .product-card__title b { font: 15px "IBM Plex Mono", monospace; }
 .product-card > small { display: block; margin-top: 6px; color: var(--faint); font-size: 13px; }
-.editorial { display: grid; grid-template-columns: 1.15fr 1fr; gap: 65px; align-items: center; padding-top: 60px; padding-bottom: 95px; }
-.editorial .placeholder { min-height: 430px; }
-.editorial h2 { margin: 0 0 22px; font-size: 40px; font-weight: 500; line-height: 1.35; }
-.editorial p:not(.eyebrow) { color: var(--muted); line-height: 1.9; }
+.video-promo { margin-top: 90px; }
+.video-promo-inner { padding: 56px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 56px; align-items: center; color: #eaf1e9; background: var(--ink); }
+.video-promo-inner .eyebrow { margin-bottom: 22px; }
+.video-promo-inner h2 { margin: 0 0 20px; font-size: 38px; font-weight: 500; line-height: 1.35; }
+.video-promo-inner p { margin: 0 0 30px; color: #9caaa1; font-size: 15px; line-height: 1.9; }
+.video-promo-inner .pill { display: inline-block; padding: 14px 30px; border: 1px solid #48534c; color: #eaf1e9; background: none; cursor: pointer; }
+.video-promo-inner .pill:hover { color: var(--ink); background: #eaf1e9; }
+.video-frame { aspect-ratio: 16/9; display: flex; align-items: center; justify-content: center; border: 1px solid #2e3e34; background-image: repeating-linear-gradient(135deg, #1e2a22 0 12px, #24322a 12px 24px); }
+.video-frame span { color: var(--faint); font: 12px "IBM Plex Mono", monospace; }
+
+.farmers { padding-block: 90px; }
+.farmers-heading { text-align: center; margin-bottom: 50px; }
+.farmers-heading h2 { margin: 0; font-size: 40px; font-weight: 500; }
+.farmer-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+.farmer .placeholder { aspect-ratio: 3/4; }
+.farmer h3 { margin: 20px 0 0; font-size: 20px; font-weight: 500; font-family: "Anuphan", sans-serif; }
+.farmer small { display: block; margin-top: 5px; color: var(--faint); font-size: 13px; }
+.farmer p { margin: 14px 0 0; color: #5f6d65; font-size: 14px; line-height: 1.85; }
+
+.testimonial { border-block: 1px solid var(--line); background: var(--wash); }
+.testimonial-inner { width: min(900px, 100%); margin-inline: auto; padding: 80px 40px; text-align: center; }
+.testimonial-inner p { margin: 0; font-size: 30px; line-height: 1.65; font-weight: 400; font-family: "Anuphan", sans-serif; }
+.testimonial-inner span { display: block; margin-top: 28px; color: var(--faint); font: 13px "IBM Plex Mono", monospace; letter-spacing: .1em; }
+
+.membership { padding-block: 90px; }
+.membership-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.membership .placeholder { aspect-ratio: 5/4; }
+.membership h2 { margin: 0 0 20px; font-size: 42px; font-weight: 500; line-height: 1.3; }
+.membership p { margin: 0 0 32px; color: #48534c; font-size: 16px; line-height: 1.9; }
+.membership-price { display: flex; align-items: baseline; gap: 12px; margin-bottom: 30px; }
+.membership-price strong { font: 34px "IBM Plex Mono", monospace; font-weight: 400; }
+.membership-price span { color: var(--faint); font-size: 14px; }
 
 .page-section { min-height: 70vh; padding-top: 68px; padding-bottom: 90px; }
 .page-heading h1 { margin: 0 0 10px; font-size: 52px; font-weight: 500; }
@@ -315,13 +345,13 @@ footer span { color: #9fa9a1; }
   .brand small { padding-left: 0; }
   .login-link { display: none; }
   .account-button { font-size: 0; }
-  .hero, .product-detail, .editorial, .story-copy { grid-template-columns: minmax(0, 1fr); }
+  .hero, .product-detail, .video-promo-inner, .farmer-grid, .membership-inner, .story-copy { grid-template-columns: minmax(0, 1fr); }
   .hero { padding-top: 50px; }
   .hero-collage { grid-template-rows: 220px 150px; }
   .benefits, .values { grid-template-columns: 1fr; }
   .product-grid, .product-grid--all { grid-template-columns: repeat(2, 1fr); }
-  .editorial { gap: 35px; }
-  .editorial .placeholder { min-height: 320px; }
+  .video-promo-inner, .farmer-grid, .membership-inner { gap: 35px; }
+  .video-promo-inner { padding: 35px; }
   .product-detail { gap: 20px; }
   .checkout-grid, .tracking-grid { grid-template-columns: 1fr; gap: 35px; }
   .summary { position: static; }
