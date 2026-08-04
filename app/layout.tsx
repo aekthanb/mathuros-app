@@ -6,6 +6,9 @@ export const metadata: Metadata = {
   title: "มธุรส | ผลไม้คัดพิเศษส่งตรงจากสวน",
   description:
     "มธุรสคัดผลไม้พรีเมียมจากสวน วัดความหวานทุกล็อต และจัดส่งถึงบ้าน",
+  icons: {
+    icon: "/img/mathuros-logo-exact.svg",
+  },
 };
 
 export const viewport: Viewport = {
