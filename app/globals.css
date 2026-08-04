@@ -285,13 +285,27 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .order-actions { display: flex; gap: 10px; }
 .order-actions .button { padding: 12px 22px; font-size: 14px; white-space: nowrap; }
 .orders-more { margin-top: 44px; text-align: center; }
-.address-card { padding: 25px; display: flex; justify-content: space-between; gap: 30px; border: 1px solid var(--ink); background: var(--wash); }
-.address-card h3 { margin: 12px 0 5px; }
-.address-card p { margin: 0; color: var(--muted); }
-.address-tag { padding: 3px 9px; color: var(--orange); border: 1px solid var(--line); border-radius: 999px; font: 10px "IBM Plex Mono", monospace; }
-.address-card > div:last-child { display: flex; gap: 14px; align-items: flex-start; }
-.address-card button { border: 0; border-bottom: 1px solid var(--ink); background: none; cursor: pointer; }
-.address-card button.muted { color: var(--faint); border-color: var(--line); }
+.address-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.address-card { padding: 28px; border: 1px solid var(--line); background: white; }
+.address-card--primary { border-color: var(--ink); background: var(--wash); }
+.address-card__head { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-bottom: 18px; }
+.address-card__name { display: flex; align-items: center; gap: 12px; font: 22px "Anuphan", sans-serif; }
+.address-card__edit { border: 0; background: none; color: var(--faint); font-size: 13px; cursor: pointer; white-space: nowrap; }
+.address-card__edit:hover { color: var(--ink); }
+.address-tag { padding: 4px 10px; color: var(--green); border: 1px solid #c2cfc1; border-radius: 999px; font: 11px "IBM Plex Mono", monospace; }
+.address-tag--muted { color: var(--orange); border-color: var(--line); }
+.address-card__text { margin: 0; color: #48534c; font-size: 14px; line-height: 1.9; }
+.address-map { position: relative; height: 130px; margin-top: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); }
+.address-map i { width: 12px; height: 12px; border-radius: 999px; border: 3px solid white; background: var(--orange); box-shadow: 0 3px 8px rgba(23,32,26,.22); }
+.address-map span { position: absolute; bottom: 10px; left: 10px; padding: 4px 8px; color: var(--faint); background: white; font: 10px "IBM Plex Mono", monospace; }
+.address-card__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; color: var(--faint); font-size: 13px; }
+.address-card__foot button { border: 0; border-bottom: 1px solid #c2cfc1; background: none; color: #5f6d65; cursor: pointer; font-size: 13px; white-space: nowrap; }
+.address-card__foot button:hover { color: var(--ink); }
+.address-add-card { padding: 28px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px dashed #c2cfc1; background: none; cursor: pointer; }
+.address-add-card:hover { border-color: var(--ink); }
+.address-add-card > span { margin-bottom: 14px; color: #c2cfc1; font-size: 26px; line-height: 1; }
+.address-add-card strong { display: block; margin-bottom: 8px; font: 500 20px "Anuphan", sans-serif; }
+.address-add-card small { max-width: 260px; color: var(--faint); font-size: 13px; line-height: 1.8; }
 .address-form { margin-top: 25px; padding: 30px; border: 1px solid var(--line); }
 .address-form h2 { margin-top: 0; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
@@ -411,6 +425,7 @@ footer span { color: #9caaa1; }
   .checkout-grid { grid-template-columns: 1fr; gap: 35px; }
   .summary { position: static; }
   .order-body { grid-template-columns: 1fr; gap: 18px; }
+  .address-grid { grid-template-columns: 1fr; }
   .order-card { padding: 22px; }
   .footer-inner { grid-template-columns: 1fr 1fr; }
 }
@@ -449,7 +464,6 @@ footer span { color: #9caaa1; }
   .order-head { flex-direction: column; align-items: flex-start; gap: 10px; }
   .order-head span { align-items: flex-start; flex-direction: column; gap: 4px; }
   .order-actions { flex-direction: column; }
-  .address-card { flex-direction: column; }
   .form-grid { grid-template-columns: 1fr; }
   .form-grid .full { grid-column: auto; }
   .footer-inner { grid-template-columns: 1fr; padding-inline: 25px; }
