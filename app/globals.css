@@ -335,8 +335,8 @@ footer span { color: #9caaa1; }
 .auth-modal__form > .button { width: 100%; margin-top: 24px; }
 .auth-divider { display: flex; align-items: center; gap: 14px; margin: 22px 0; color: var(--faint); font-size: 12px; }
 .auth-divider span { flex: 1; height: 1px; background: var(--line); }
-.auth-line-button { width: 100%; padding: 15px; border: 1px solid #c2cfc1; background: none; color: var(--ink); text-align: center; font-size: 14px; cursor: pointer; }
-.auth-line-button:hover { border-color: var(--ink); }
+.auth-alt-button { width: 100%; padding: 15px; border: 1px solid #c2cfc1; background: none; color: var(--ink); text-align: center; font-size: 14px; cursor: pointer; }
+.auth-alt-button:hover { border-color: var(--ink); }
 .auth-modal__form > small { display: block; margin-top: 20px; color: var(--faint); font-size: 12px; line-height: 1.8; text-align: center; }
 
 @media (max-width: 1180px) {

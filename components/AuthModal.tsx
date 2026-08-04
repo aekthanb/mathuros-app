@@ -58,7 +58,7 @@ export default function AuthModal() {
           </div>
           <button className="button button--dark" onClick={submit}>{authMode === "register" ? "สมัครสมาชิกและสั่งซื้อต่อ" : "เข้าสู่ระบบ"}</button>
           <div className="auth-divider"><span /> หรือ <span /></div>
-          <button className="auth-line-button" onClick={submit}>ดำเนินการต่อด้วย LINE</button>
+          <button className="auth-alt-button" onClick={submit}>ดำเนินการต่อด้วย Google</button>
           <small>การสมัครถือว่ายอมรับเงื่อนไขการใช้งานและนโยบายความเป็นส่วนตัว</small>
         </div>
       </div>
