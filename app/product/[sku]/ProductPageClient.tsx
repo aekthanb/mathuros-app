@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { baht, priceFor } from "../../../lib/data";
 import ProductImage from "../../../components/ProductImage";
 import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
@@ -10,7 +9,6 @@ import { setQty, setSize, setSku } from "../../../lib/store/slices/productSlice"
 import { addToCart } from "../../../lib/store/slices/cartSlice";
 
 export default function ProductPageClient({ sku }: { sku: string }) {
-  const router = useRouter();
   const dispatch = useAppDispatch();
   const size = useAppSelector((state) => state.product.size);
   const qty = useAppSelector((state) => state.product.qty);
@@ -60,7 +58,7 @@ export default function ProductPageClient({ sku }: { sku: string }) {
               <span>{qty}</span>
               <button onClick={() => dispatch(setQty(qty + 1))}>＋</button>
             </div>
-            <button className="button button--dark" onClick={() => { dispatch(addToCart(qty)); router.push("/cart"); }}>ใส่ตะกร้า · {baht(unitPrice * qty)}</button>
+            <button className="button button--dark" onClick={() => dispatch(addToCart(qty))}>ใส่ตะกร้า · {baht(unitPrice * qty)}</button>
           </div>
           <p className="shipping-note">จัดส่งแบบควบคุมอุณหภูมิ · ถึงมือภายใน ๒๔ ชั่วโมง</p>
         </div>
