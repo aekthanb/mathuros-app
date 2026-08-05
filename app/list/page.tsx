@@ -3,11 +3,12 @@
 import { useRouter } from "next/navigation";
 import { PRODUCTS } from "../../lib/data";
 import ProductCard from "../../components/ProductCard";
-import { useStore } from "../../components/StoreProvider";
+import { useAppDispatch } from "../../lib/store/hooks";
+import { addToCart } from "../../lib/store/slices/cartSlice";
 
 export default function ListPage() {
   const router = useRouter();
-  const { addToCart } = useStore();
+  const dispatch = useAppDispatch();
 
   return (
     <main className="section page-section">
@@ -31,7 +32,7 @@ export default function ListPage() {
           <h2>กล่องคัดพิเศษของสัปดาห์นี้</h2>
           <p>ทีมคัดเกรดจัดให้เองจากผลไม้ที่ดีที่สุดของสัปดาห์ ส่งฟรีทุกกล่อง</p>
         </div>
-        <button className="button button--dark pill" onClick={() => { addToCart(1); router.push("/cart"); }}>สั่งกล่องนี้ ฿1,490</button>
+        <button className="button button--dark pill" onClick={() => { dispatch(addToCart(1)); router.push("/cart"); }}>สั่งกล่องนี้ ฿1,490</button>
       </div>
     </main>
   );

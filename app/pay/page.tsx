@@ -2,10 +2,10 @@
 
 import Link from "next/link";
 import { baht, priceFor } from "../../lib/data";
-import { useStore } from "../../components/StoreProvider";
+import { useAppSelector } from "../../lib/store/hooks";
 
 export default function PayPage() {
-  const { sku, size, qty } = useStore();
+  const { sku, size, qty } = useAppSelector((state) => state.product);
   const { unitPrice } = priceFor(sku, size);
   const subtotal = unitPrice * qty + 420;
   const grandTotal = subtotal + 120;

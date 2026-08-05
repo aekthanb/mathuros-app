@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { PRODUCTS, baht } from "../lib/data";
-import { useStore } from "./StoreProvider";
+import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
+import { askAssistant, setChatOpen, setQuery } from "../lib/store/slices/assistantSlice";
 
 const QUICK_PROMPTS: [string, string][] = [
   ["gift", "ของฝากผู้ใหญ่"],
@@ -13,7 +14,10 @@ const QUICK_PROMPTS: [string, string][] = [
 ];
 
 export default function AssistantChat() {
-  const { chatOpen, setChatOpen, query, setQuery, messages, askAssistant } = useStore();
+  const dispatch = useAppDispatch();
+  const chatOpen = useAppSelector((state) => state.assistant.chatOpen);
+  const query = useAppSelector((state) => state.assistant.query);
+  const messages = useAppSelector((state) => state.assistant.messages);
   const chatRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -22,7 +26,7 @@ export default function AssistantChat() {
 
   return (
     <aside className={`assistant ${chatOpen ? "assistant--open" : ""}`}>
-      <button className="assistant-trigger" onClick={() => setChatOpen(true)} tabIndex={chatOpen ? -1 : 0} aria-hidden={chatOpen}>
+      <button className="assistant-trigger" onClick={() => dispatch(setChatOpen(true))} tabIndex={chatOpen ? -1 : 0} aria-hidden={chatOpen}>
         <span className="assistant-head__dot" />
         <span>ให้ AI ช่วยเลือกผลไม้</span>
       </button>
@@ -30,7 +34,7 @@ export default function AssistantChat() {
         <div className="assistant-head">
           <span className="assistant-head__dot" />
           <div className="assistant-head__title"><strong>ผู้ช่วยเลือกผลไม้</strong><small>MATHUROS AI</small></div>
-          <button className="assistant-close" onClick={() => setChatOpen(false)} tabIndex={chatOpen ? 0 : -1} aria-label="ปิด">×</button>
+          <button className="assistant-close" onClick={() => dispatch(setChatOpen(false))} tabIndex={chatOpen ? 0 : -1} aria-label="ปิด">×</button>
         </div>
         <div className="messages" ref={chatRef}>
           {messages.map((message, index) => (
@@ -52,18 +56,18 @@ export default function AssistantChat() {
         <div className="assistant-footer">
           <div className="quick-prompts">
             {QUICK_PROMPTS.map(([key, text]) => (
-              <button key={key} onClick={() => askAssistant(text)} tabIndex={chatOpen ? 0 : -1}>{text}</button>
+              <button key={key} onClick={() => dispatch(askAssistant(text))} tabIndex={chatOpen ? 0 : -1}>{text}</button>
             ))}
           </div>
           <div className="chat-input">
             <input
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              onKeyDown={(event) => { if (event.key === "Enter") askAssistant(); }}
+              onChange={(event) => dispatch(setQuery(event.target.value))}
+              onKeyDown={(event) => { if (event.key === "Enter") dispatch(askAssistant(query)); }}
               placeholder="พิมพ์สิ่งที่ต้องการ…"
               tabIndex={chatOpen ? 0 : -1}
             />
-            <button onClick={() => askAssistant()} tabIndex={chatOpen ? 0 : -1}>ส่ง</button>
+            <button onClick={() => dispatch(askAssistant(query))} tabIndex={chatOpen ? 0 : -1}>ส่ง</button>
           </div>
         </div>
       </div>

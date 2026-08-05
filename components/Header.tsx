@@ -1,20 +1,24 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useStore } from "./StoreProvider";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
+import { logout } from "../lib/store/slices/authSlice";
+import { setMenuOpen, toggleMenu } from "../lib/store/slices/uiSlice";
+import { setAuthMode, setAuthOpen } from "../lib/store/slices/authModalSlice";
 
 export default function Header() {
   const router = useRouter();
-  const {
-    user,
-    logout,
-    menuOpen,
-    setMenuOpen,
-    cartCount,
-    setAuthMode,
-    setAuthOpen,
-  } = useStore();
+  const pathname = usePathname();
+  const dispatch = useAppDispatch();
+  const user = useAppSelector((state) => state.auth.user);
+  const menuOpen = useAppSelector((state) => state.ui.menuOpen);
+  const cartCount = useAppSelector((state) => state.cart.count);
+
+  useEffect(() => {
+    dispatch(setMenuOpen(false));
+  }, [pathname, dispatch]);
 
   return (
     <header className="header">
@@ -33,7 +37,7 @@ export default function Header() {
             <div className="account">
               <button
                 className="account-button"
-                onClick={() => setMenuOpen((open) => !open)}
+                onClick={() => dispatch(toggleMenu())}
               >
                 <i /> {user}
                 {/* <span>⌄</span> */}
@@ -50,7 +54,7 @@ export default function Header() {
                   <button
                     className="muted"
                     onClick={() => {
-                      logout();
+                      dispatch(logout());
                       router.push("/");
                     }}
                   >
@@ -63,8 +67,8 @@ export default function Header() {
             <button
               className="login-link"
               onClick={() => {
-                setAuthMode("login");
-                setAuthOpen(true);
+                dispatch(setAuthMode("login"));
+                dispatch(setAuthOpen(true));
               }}
             >
               เข้าสู่ระบบ

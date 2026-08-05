@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { baht, priceFor } from "../../lib/data";
-import { useStore } from "../../components/StoreProvider";
+import { useAppSelector } from "../../lib/store/hooks";
 
 const PROGRESS: [string, string, boolean, boolean][] = [
   ["รับคำสั่งซื้อ", "๑๐:๑๒", true, false],
@@ -12,7 +12,7 @@ const PROGRESS: [string, string, boolean, boolean][] = [
 ];
 
 export default function TrackPage() {
-  const { sku, size, qty } = useStore();
+  const { sku, size, qty } = useAppSelector((state) => state.product);
   const { product, sizes, unitPrice } = priceFor(sku, size);
   const subtotal = unitPrice * qty + 420;
   const grandTotal = subtotal + 120;

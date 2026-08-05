@@ -5,14 +5,18 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { baht, priceFor } from "../../../lib/data";
 import ProductImage from "../../../components/ProductImage";
-import { useStore } from "../../../components/StoreProvider";
+import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
+import { setQty, setSize, setSku } from "../../../lib/store/slices/productSlice";
+import { addToCart } from "../../../lib/store/slices/cartSlice";
 
 export default function ProductPageClient({ sku }: { sku: string }) {
   const router = useRouter();
-  const { setSku, size, setSize, qty, setQty, addToCart } = useStore();
+  const dispatch = useAppDispatch();
+  const size = useAppSelector((state) => state.product.size);
+  const qty = useAppSelector((state) => state.product.qty);
 
   useEffect(() => {
-    setSku(sku);
+    dispatch(setSku(sku));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sku]);
 
@@ -45,18 +49,18 @@ export default function ProductPageClient({ sku }: { sku: string }) {
           <div className="option-title"><span>เลือกขนาด</span><small>ราคาต่อชุด</small></div>
           <div className="size-options">
             {sizes.map(([label, value], index) => (
-              <button className={index === size ? "active" : ""} key={label} onClick={() => setSize(index)}>
+              <button className={index === size ? "active" : ""} key={label} onClick={() => dispatch(setSize(index))}>
                 <span>{label}</span><strong>{baht(value)}</strong>
               </button>
             ))}
           </div>
           <div className="purchase-row">
             <div className="quantity">
-              <button onClick={() => setQty((value) => Math.max(1, value - 1))}>−</button>
+              <button onClick={() => dispatch(setQty(Math.max(1, qty - 1)))}>−</button>
               <span>{qty}</span>
-              <button onClick={() => setQty((value) => value + 1)}>＋</button>
+              <button onClick={() => dispatch(setQty(qty + 1))}>＋</button>
             </div>
-            <button className="button button--dark" onClick={() => { addToCart(qty); router.push("/cart"); }}>ใส่ตะกร้า · {baht(unitPrice * qty)}</button>
+            <button className="button button--dark" onClick={() => { dispatch(addToCart(qty)); router.push("/cart"); }}>ใส่ตะกร้า · {baht(unitPrice * qty)}</button>
           </div>
           <p className="shipping-note">จัดส่งแบบควบคุมอุณหภูมิ · ถึงมือภายใน ๒๔ ชั่วโมง</p>
         </div>
