@@ -208,10 +208,18 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-option__line { display: block; margin-top: 5px; color: var(--faint); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .address-option__edit { flex-shrink: 0; color: var(--faint); font-size: 13px; }
 .address-form--inline { margin-top: 0; padding: 0; border: 0; }
-.address-map--picker { height: 200px; margin-top: 4px; }
-.address-map--picker span { max-width: calc(100% - 20px); white-space: normal; }
-.address-map__locate { position: absolute; bottom: 10px; right: 10px; padding: 9px 16px; border: 1px solid #c2cfc1; background: white; font-size: 13px; cursor: pointer; }
+.address-map.address-map--picker { display: block; height: 340px; margin-top: 4px; background-image: none; overflow: hidden; }
+.address-map--picker > span { z-index: 1200; max-width: calc(100% - 20px); white-space: normal; }
+.address-map__loading { display: flex; align-items: center; justify-content: center; height: 340px; margin-top: 4px; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); color: var(--faint); font-size: 13px; }
+.address-map__locate { position: absolute; top: 10px; right: 10px; z-index: 1200; padding: 9px 16px; border: 1px solid #c2cfc1; background: white; font-size: 13px; cursor: pointer; }
 .address-map__locate:hover { border-color: var(--ink); }
+.address-map__locate:disabled { opacity: .6; cursor: wait; }
+.address-map__error { margin: 10px 0 0; color: var(--orange); font-size: 12px; }
+.leaflet-container { font-family: "IBM Plex Sans Thai", sans-serif; }
+.leaflet-container a { color: var(--green); }
+.leaflet-control-attribution { font-size: 9px !important; }
+.leaflet-div-icon.map-pin { background: none; border: 0; }
+.map-pin span { display: block; width: 14px; height: 14px; border-radius: 999px; border: 3px solid white; background: var(--orange); box-shadow: 0 3px 8px rgba(23,32,26,.22); }
 .checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 14px; cursor: pointer; }
 .checkbox-row input { width: 16px; height: 16px; accent-color: var(--ink); }
 .summary { position: sticky; top: 112px; padding: 28px; border: 1px solid var(--line); background: #fafcf9; }
@@ -350,7 +358,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-card__text { margin: 0; color: #48534c; font-size: 14px; line-height: 1.9; }
 .address-map { position: relative; height: 130px; margin-top: 22px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); }
 .address-map i { width: 12px; height: 12px; border-radius: 999px; border: 3px solid white; background: var(--orange); box-shadow: 0 3px 8px rgba(23,32,26,.22); }
-.address-map span { position: absolute; bottom: 10px; left: 10px; padding: 4px 8px; color: var(--faint); background: white; font: 10px "IBM Plex Mono", monospace; }
+.address-map > span { position: absolute; bottom: 10px; left: 10px; padding: 4px 8px; color: var(--faint); background: white; font: 10px "IBM Plex Mono", monospace; }
 .address-card__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; color: var(--faint); font-size: 13px; }
 .address-card__foot button { border: 0; border-bottom: 1px solid #c2cfc1; background: none; color: #5f6d65; cursor: pointer; font-size: 13px; white-space: nowrap; }
 .address-card__foot button:hover { color: var(--ink); }
