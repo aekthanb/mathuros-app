@@ -187,9 +187,33 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .cart-line__end > strong { font: 15px "IBM Plex Mono", monospace; }
 .quantity--small button { width: 32px; height: 34px; }
 .gift-note { margin-top: 25px; padding: 20px 23px; border: 1px solid var(--line); background: var(--wash); }
+.cart-empty { padding: 40px 0; color: var(--faint); font-size: 14px; text-align: center; }
+.button--dark:disabled { opacity: .4; cursor: not-allowed; }
 .gift-note > span { font: 500 17px "Anuphan", sans-serif; }
 .gift-note p { margin: 6px 0 13px; color: var(--muted); font-size: 13px; }
 .gift-note button { padding: 0; border: 0; border-bottom: 1px solid var(--ink); background: none; cursor: pointer; font-size: 13px; }
+
+.address-section { margin-top: 44px; padding-top: 36px; border-top: 1px solid var(--line); }
+.address-section__head { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; margin-bottom: 20px; }
+.address-section__head h2 { margin: 0; font-size: 24px; font-weight: 500; }
+.address-section__head > span { color: var(--faint); font-size: 13px; }
+.address-picker { display: grid; gap: 10px; margin-bottom: 20px; }
+.address-option { display: flex; align-items: center; gap: 16px; width: 100%; padding: 16px 18px; border: 1px solid var(--line); background: white; text-align: left; cursor: pointer; font: inherit; color: inherit; }
+.address-option:hover { border-color: #c2cfc1; }
+.address-option--active { border-color: var(--ink); background: var(--wash); }
+.address-option__dot { flex-shrink: 0; width: 15px; height: 15px; border-radius: 999px; border: 1px solid #c2cfc1; background: white; box-sizing: border-box; }
+.address-option--active .address-option__dot { border: 4px solid var(--ink); }
+.address-option__body { flex: 1; min-width: 0; }
+.address-option__name { display: flex; align-items: center; gap: 10px; font-size: 15px; }
+.address-option__line { display: block; margin-top: 5px; color: var(--faint); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.address-option__edit { flex-shrink: 0; color: var(--faint); font-size: 13px; }
+.address-form--inline { margin-top: 0; padding: 0; border: 0; }
+.address-map--picker { height: 200px; margin-top: 4px; }
+.address-map--picker span { max-width: calc(100% - 20px); white-space: normal; }
+.address-map__locate { position: absolute; bottom: 10px; right: 10px; padding: 9px 16px; border: 1px solid #c2cfc1; background: white; font-size: 13px; cursor: pointer; }
+.address-map__locate:hover { border-color: var(--ink); }
+.checkbox-row { display: flex; align-items: center; gap: 10px; margin-top: 18px; font-size: 14px; cursor: pointer; }
+.checkbox-row input { width: 16px; height: 16px; accent-color: var(--ink); }
 .summary { position: sticky; top: 112px; padding: 28px; border: 1px solid var(--line); background: #fafcf9; }
 .summary h2 { margin: 0 0 25px; font-size: 25px; font-weight: 500; }
 .summary > div { display: flex; justify-content: space-between; gap: 15px; padding: 10px 0; color: var(--muted); font-size: 14px; }

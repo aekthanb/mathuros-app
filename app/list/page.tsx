@@ -32,7 +32,24 @@ export default function ListPage() {
           <h2>กล่องคัดพิเศษของสัปดาห์นี้</h2>
           <p>ทีมคัดเกรดจัดให้เองจากผลไม้ที่ดีที่สุดของสัปดาห์ ส่งฟรีทุกกล่อง</p>
         </div>
-        <button className="button button--dark pill" onClick={() => { dispatch(addToCart(1)); router.push("/cart"); }}>สั่งกล่องนี้ ฿1,490</button>
+        <button
+          className="button button--dark pill"
+          onClick={() => {
+            dispatch(
+              addToCart({
+                sku: "special-box",
+                name: "กล่องคัดพิเศษของสัปดาห์นี้",
+                label: "กล่องคัดพิเศษ 800×1000",
+                sizeLabel: "กล่องคัดพิเศษ",
+                unitPrice: 1490,
+                qty: 1,
+              })
+            );
+            router.push("/cart");
+          }}
+        >
+          สั่งกล่องนี้ ฿1,490
+        </button>
       </div>
     </main>
   );

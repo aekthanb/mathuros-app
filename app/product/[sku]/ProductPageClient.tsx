@@ -58,7 +58,23 @@ export default function ProductPageClient({ sku }: { sku: string }) {
               <span>{qty}</span>
               <button onClick={() => dispatch(setQty(qty + 1))}>＋</button>
             </div>
-            <button className="button button--dark" onClick={() => dispatch(addToCart(qty))}>ใส่ตะกร้า · {baht(unitPrice * qty)}</button>
+            <button
+              className="button button--dark"
+              onClick={() =>
+                dispatch(
+                  addToCart({
+                    sku: product.sku,
+                    name: product.name,
+                    label: product.label,
+                    sizeLabel: sizes[size][0],
+                    unitPrice,
+                    qty,
+                  })
+                )
+              }
+            >
+              ใส่ตะกร้า · {baht(unitPrice * qty)}
+            </button>
           </div>
           <p className="shipping-note">จัดส่งแบบควบคุมอุณหภูมิ · ถึงมือภายใน ๒๔ ชั่วโมง</p>
         </div>

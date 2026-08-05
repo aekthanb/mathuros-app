@@ -5,6 +5,7 @@ export default function CartLine({
   price,
   qty = 1,
   setQty,
+  onRemove,
 }: {
   label: string;
   name: string;
@@ -12,6 +13,7 @@ export default function CartLine({
   price: string;
   qty?: number;
   setQty?: (qty: number) => void;
+  onRemove?: () => void;
 }) {
   return (
     <article className="cart-line">
@@ -19,7 +21,7 @@ export default function CartLine({
       <div>
         <h3>{name}</h3>
         <p>{detail}</p>
-        <button className="remove">นำออก</button>
+        <button className="remove" onClick={onRemove}>นำออก</button>
       </div>
       <div className="cart-line__end">
         {setQty && (

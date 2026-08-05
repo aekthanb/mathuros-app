@@ -14,7 +14,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const user = useAppSelector((state) => state.auth.user);
   const menuOpen = useAppSelector((state) => state.ui.menuOpen);
-  const cartCount = useAppSelector((state) => state.cart.count);
+  const cartCount = useAppSelector((state) => state.cart.items.reduce((sum, item) => sum + item.qty, 0));
 
   useEffect(() => {
     dispatch(setMenuOpen(false));

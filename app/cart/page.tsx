@@ -1,21 +1,29 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { baht, priceFor } from "../../lib/data";
+import { ADDRESSES, baht } from "../../lib/data";
 import CartLine from "../../components/CartLine";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
-import { setQty } from "../../lib/store/slices/productSlice";
+import { removeFromCart, updateCartQty } from "../../lib/store/slices/cartSlice";
 import { setAuthMode, setAuthOpen } from "../../lib/store/slices/authModalSlice";
+
+const SHIPPING = 120;
 
 export default function CartPage() {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const { sku, size, qty } = useAppSelector((state) => state.product);
-  const cartCount = useAppSelector((state) => state.cart.count);
+  const items = useAppSelector((state) => state.cart.items);
   const user = useAppSelector((state) => state.auth.user);
-  const { product, sizes, unitPrice } = priceFor(sku, size);
-  const subtotal = unitPrice * qty + 420;
-  const grandTotal = subtotal + 120;
+  const cartCount = items.reduce((sum, item) => sum + item.qty, 0);
+  const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
+  const shipping = items.length ? SHIPPING : 0;
+  const grandTotal = subtotal + shipping;
+
+  const [selectedAddress, setSelectedAddress] = useState(() => ADDRESSES.find((addr) => addr.primary)?.name ?? ADDRESSES[0]?.name ?? "");
+  const [useNewAddress, setUseNewAddress] = useState(false);
+  const [saveNewAddress, setSaveNewAddress] = useState(false);
+  const showAddressForm = !user || useNewAddress;
 
   function checkout() {
     if (!user) {
@@ -34,17 +42,95 @@ export default function CartPage() {
       </div>
       <div className="checkout-grid">
         <div className="cart-items">
-          <CartLine label={product.label} name={product.name} detail={`${sizes[size][0]} · ส่งพรุ่งนี้`} price={baht(unitPrice * qty)} qty={qty} setQty={(value) => dispatch(setQty(value))} />
-          <CartLine label="ส้มสายน้ำผึ้ง 800×1000" name="ส้มสายน้ำผึ้ง ฝาง" detail="ตะกร้า ๒ กก. · ส่งพรุ่งนี้" price="฿420" />
+          {items.length === 0 ? (
+            <p className="cart-empty">ยังไม่มีสินค้าในตะกร้า</p>
+          ) : (
+            items.map((item) => (
+              <CartLine
+                key={item.id}
+                label={item.label}
+                name={item.name}
+                detail={`${item.sizeLabel} · ส่งพรุ่งนี้`}
+                price={baht(item.unitPrice * item.qty)}
+                qty={item.qty}
+                setQty={(value) => dispatch(updateCartQty({ id: item.id, qty: value }))}
+                onRemove={() => dispatch(removeFromCart(item.id))}
+              />
+            ))
+          )}
           <div className="gift-note"><span>ส่งเป็นของขวัญ</span><p>เพิ่มการ์ดเขียนมือและห่อริบบิ้นให้ฟรี</p><button>เพิ่มข้อความในการ์ด</button></div>
+
+          {items.length > 0 && (
+            <div className="address-section">
+              <div className="address-section__head">
+                <h2>ที่อยู่จัดส่ง</h2>
+                {user && <span>ที่อยู่ที่บันทึกไว้ {ADDRESSES.length} รายการ</span>}
+              </div>
+
+              {user && (
+                <div className="address-picker">
+                  {ADDRESSES.map((addr) => (
+                    <button
+                      key={addr.name}
+                      type="button"
+                      className={`address-option ${!useNewAddress && selectedAddress === addr.name ? "address-option--active" : ""}`}
+                      onClick={() => { setSelectedAddress(addr.name); setUseNewAddress(false); }}
+                    >
+                      <span className="address-option__dot" />
+                      <span className="address-option__body">
+                        <span className="address-option__name">
+                          <span>{addr.name}</span>
+                          {addr.tag && <span className={`address-tag ${addr.tagVariant === "muted" ? "address-tag--muted" : ""}`}>{addr.tag}</span>}
+                        </span>
+                        <span className="address-option__line">{addr.lines.join(" ")}</span>
+                      </span>
+                      <span className="address-option__edit">แก้ไข</span>
+                    </button>
+                  ))}
+                  <button
+                    type="button"
+                    className={`address-option address-option--new ${useNewAddress ? "address-option--active" : ""}`}
+                    onClick={() => setUseNewAddress(true)}
+                  >
+                    <span className="address-option__dot" />
+                    <span className="address-option__body">
+                      <span className="address-option__name">ใช้ที่อยู่ใหม่</span>
+                    </span>
+                    <span className="address-option__edit">กรอกเอง</span>
+                  </button>
+                </div>
+              )}
+
+              {showAddressForm && (
+                <div className="address-form address-form--inline">
+                  <div className="form-grid">
+                    <label>ชื่อผู้รับ<input placeholder="ชื่อ–นามสกุล" /></label>
+                    <label>เบอร์โทร<input placeholder="08X-XXX-XXXX" /></label>
+                    <label className="full">ที่อยู่<input placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ" /></label>
+                    <label>จังหวัด<input placeholder="เลือกจังหวัด" /></label>
+                    <label>รหัสไปรษณีย์<input inputMode="numeric" placeholder="10XXX" /></label>
+                  </div>
+                  <div className="address-map address-map--picker">
+                    <i />
+                    <span>แผนที่ — ลากหมุดเลือกจุดจัดส่ง (รอเชื่อมแผนที่จริง)</span>
+                    <button type="button" className="address-map__locate">ใช้ตำแหน่งปัจจุบัน</button>
+                  </div>
+                  <label className="checkbox-row">
+                    <input type="checkbox" checked={saveNewAddress} onChange={(event) => setSaveNewAddress(event.target.checked)} />
+                    <span>บันทึกที่อยู่นี้ไว้ใช้ครั้งหน้า</span>
+                  </label>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <aside className="summary">
           <h2>สรุปคำสั่งซื้อ</h2>
           <div><span>ยอดสินค้า</span><strong>{baht(subtotal)}</strong></div>
-          <div><span>ค่าจัดส่งควบคุมอุณหภูมิ</span><strong>฿120</strong></div>
+          <div><span>ค่าจัดส่งควบคุมอุณหภูมิ</span><strong>{baht(shipping)}</strong></div>
           <div className="discount"><span>ส่วนลดสมาชิก</span><strong>—</strong></div>
           <div className="summary-total"><span>ยอดรวม</span><strong>{baht(grandTotal)}</strong></div>
-          <button className="button button--dark" onClick={checkout}>{user ? "ไปหน้าสแกน QR" : "สมัครสมาชิกเพื่อสั่งซื้อ"}</button>
+          <button className="button button--dark" onClick={checkout} disabled={items.length === 0}>{user ? "ไปหน้าสแกน QR" : "สมัครสมาชิกเพื่อสั่งซื้อ"}</button>
           <small>ชำระผ่าน PromptPay · ข้อมูลถูกเข้ารหัสอย่างปลอดภัย</small>
         </aside>
       </div>
