@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { ADDRESSES, baht } from "../../lib/data";
 import CartLine from "../../components/CartLine";
+import AddressSearch, { type AddressSearchResult } from "../../components/AddressSearch";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
 import { removeFromCart, updateCartQty } from "../../lib/store/slices/cartSlice";
 import { setAuthMode, setAuthOpen } from "../../lib/store/slices/authModalSlice";
@@ -39,6 +40,17 @@ export default function CartPage() {
   const [coords, setCoords] = useState(DEFAULT_COORDS);
   const [locating, setLocating] = useState(false);
   const [locateError, setLocateError] = useState<string | null>(null);
+
+  const [addressText, setAddressText] = useState("");
+  const [province, setProvince] = useState("");
+  const [postcode, setPostcode] = useState("");
+
+  function handleAddressSearchSelect(result: AddressSearchResult) {
+    setCoords({ lat: result.lat, lng: result.lng });
+    if (result.addressLine) setAddressText(result.addressLine);
+    if (result.province) setProvince(result.province);
+    if (result.postcode) setPostcode(result.postcode);
+  }
 
   function locateMe() {
     if (!navigator.geolocation) {
@@ -138,12 +150,26 @@ export default function CartPage() {
 
               {showAddressForm && (
                 <div className="address-form address-form--inline">
+                  <AddressSearch onSelect={handleAddressSearchSelect} />
                   <div className="form-grid">
                     <label>ชื่อผู้รับ<input placeholder="ชื่อ–นามสกุล" /></label>
                     <label>เบอร์โทร<input placeholder="08X-XXX-XXXX" /></label>
-                    <label className="full">ที่อยู่<input placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ" /></label>
-                    <label>จังหวัด<input placeholder="เลือกจังหวัด" /></label>
-                    <label>รหัสไปรษณีย์<input inputMode="numeric" placeholder="10XXX" /></label>
+                    <label className="full">
+                      ที่อยู่
+                      <input
+                        value={addressText}
+                        onChange={(event) => setAddressText(event.target.value)}
+                        placeholder="บ้านเลขที่ ถนน แขวง/ตำบล เขต/อำเภอ"
+                      />
+                    </label>
+                    <label>
+                      จังหวัด
+                      <input value={province} onChange={(event) => setProvince(event.target.value)} placeholder="เลือกจังหวัด" />
+                    </label>
+                    <label>
+                      รหัสไปรษณีย์
+                      <input inputMode="numeric" value={postcode} onChange={(event) => setPostcode(event.target.value)} placeholder="10XXX" />
+                    </label>
                   </div>
                   <div className="address-map address-map--picker">
                     <AddressMap

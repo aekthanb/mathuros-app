@@ -208,6 +208,14 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-option__line { display: block; margin-top: 5px; color: var(--faint); font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .address-option__edit { flex-shrink: 0; color: var(--faint); font-size: 13px; }
 .address-form--inline { margin-top: 0; padding: 0; border: 0; }
+.address-search { position: relative; margin-bottom: 18px; }
+.address-search input { width: 100%; box-sizing: border-box; padding: 13px 14px; border: 1px solid #c2cfc1; background: white; font: 15px "IBM Plex Sans Thai", sans-serif; color: var(--ink); }
+.address-search__results { position: absolute; z-index: 1300; top: calc(100% + 6px); left: 0; right: 0; max-height: 260px; overflow-y: auto; border: 1px solid var(--line); background: white; box-shadow: 0 14px 34px rgba(23,32,26,.13); }
+.address-search__item { display: block; width: 100%; padding: 12px 14px; border: 0; border-top: 1px solid var(--line); background: none; text-align: left; font-size: 13px; line-height: 1.6; color: var(--ink); cursor: pointer; }
+.address-search__item:first-child { border-top: 0; }
+.address-search__item:hover { background: var(--wash); }
+.address-search__status { padding: 12px 14px; color: var(--faint); font-size: 13px; }
+.address-search__status--error { color: var(--orange); }
 .address-map.address-map--picker { display: block; height: 340px; margin-top: 4px; background-image: none; overflow: hidden; }
 .address-map--picker > span { z-index: 1200; max-width: calc(100% - 20px); white-space: normal; }
 .address-map__loading { display: flex; align-items: center; justify-content: center; height: 340px; margin-top: 4px; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); color: var(--faint); font-size: 13px; }
