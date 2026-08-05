@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import { baht, priceFor } from "../../../lib/data";
+import { PRODUCTS, baht, priceFor } from "../../../lib/data";
 import ProductImage from "../../../components/ProductImage";
 import { useAppDispatch, useAppSelector } from "../../../lib/store/hooks";
 import { setQty, setSize, setSku } from "../../../lib/store/slices/productSlice";
@@ -19,6 +19,9 @@ export default function ProductPageClient({ sku }: { sku: string }) {
   }, [sku]);
 
   const { product, sizes, unitPrice } = priceFor(sku, size);
+
+  const currentIndex = PRODUCTS.findIndex((item) => item.sku === product.sku);
+  const relatedProducts = Array.from({ length: 4 }, (_, offset) => PRODUCTS[(currentIndex + offset + 1) % PRODUCTS.length]);
 
   return (
     <main className="section product-page">
@@ -79,6 +82,19 @@ export default function ProductPageClient({ sku }: { sku: string }) {
           <p className="shipping-note">จัดส่งแบบควบคุมอุณหภูมิ · ถึงมือภายใน ๒๔ ชั่วโมง</p>
         </div>
       </div>
+
+      <section className="related-products">
+        <h2>ลูกค้ามักซื้อคู่กับ</h2>
+        <div className="related-products__grid">
+          {relatedProducts.map((item) => (
+            <Link key={item.sku} href={`/product/${item.sku}`} className="related-product">
+              <ProductImage product={item} />
+              <div className="related-product__name">{item.name}</div>
+              <div className="related-product__price">{baht(item.price)}</div>
+            </Link>
+          ))}
+        </div>
+      </section>
     </main>
   );
 }
