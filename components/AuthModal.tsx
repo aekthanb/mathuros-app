@@ -1,8 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
-import { jwtDecode, type JwtPayload } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
 import { useRouter } from "next/navigation";
 import {
   loadFacebookSdk,
@@ -13,11 +12,65 @@ import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
 import { setUser } from "../lib/store/slices/authSlice";
 import { setAuthOpen } from "../lib/store/slices/authModalSlice";
 
-type GoogleJwtPayload = JwtPayload & {
+type GoogleProfile = {
+  sub?: string;
   name?: string;
   email?: string;
   picture?: string;
 };
+
+type GoogleLoginButtonProps = {
+  onSuccess: (profile: GoogleProfile) => void;
+  onError: (message: string) => void;
+};
+
+function GoogleLoginButton({ onSuccess, onError }: GoogleLoginButtonProps) {
+  const [loading, setLoading] = useState(false);
+  const login = useGoogleLogin({
+    scope: "openid profile email",
+    onSuccess: async ({ access_token: accessToken }) => {
+      try {
+        const response = await fetch("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        if (!response.ok) throw new Error("ไม่สามารถดึงข้อมูลบัญชี Google ได้");
+        onSuccess(await response.json() as GoogleProfile);
+      } catch (error) {
+        onError(error instanceof Error ? error.message : "เข้าสู่ระบบด้วย Google ไม่สำเร็จ");
+      } finally {
+        setLoading(false);
+      }
+    },
+    onError: () => {
+      setLoading(false);
+      onError("เข้าสู่ระบบด้วย Google ไม่สำเร็จ กรุณาลองใหม่");
+    },
+    onNonOAuthError: () => {
+      setLoading(false);
+      onError("ยกเลิกการเข้าสู่ระบบด้วย Google");
+    },
+  });
+
+  return (
+    <button
+      className="auth-alt-button auth-google-custom-button"
+      onClick={() => {
+        setLoading(true);
+        login();
+      }}
+      disabled={loading}
+    >
+      <svg className="auth-provider-icon" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285f4" d="M17.64 9.205c0-.638-.057-1.252-.164-1.841H9v3.482h4.844a4.14 4.14 0 0 1-1.797 2.716v2.258h2.909c1.702-1.567 2.684-3.875 2.684-6.615Z" />
+        <path fill="#34a853" d="M9 18c2.43 0 4.468-.806 5.956-2.18l-2.909-2.258c-.806.54-1.836.859-3.047.859-2.344 0-4.328-1.585-5.037-3.714H.956v2.332A9 9 0 0 0 9 18Z" />
+        <path fill="#fbbc05" d="M3.963 10.707A5.41 5.41 0 0 1 3.681 9c0-.593.102-1.169.282-1.707V4.961H.956A9.003 9.003 0 0 0 0 9c0 1.452.347 2.827.956 4.039l3.007-2.332Z" />
+        <path fill="#ea4335" d="M9 3.579c1.321 0 2.507.454 3.441 1.346l2.581-2.581C13.464.892 11.426 0 9 0A9 9 0 0 0 .956 4.961l3.007 2.332C4.672 5.164 6.656 3.579 9 3.579Z" />
+      </svg>
+      {loading ? "กำลังเข้าสู่ระบบด้วย Google..." : "ดำเนินการต่อโดยใช้ Google"}
+    </button>
+  );
+}
 
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 const facebookAppId = process.env.NEXT_PUBLIC_FACEBOOK_APP_ID;
@@ -37,27 +90,20 @@ export default function AuthModal() {
   const [facebookError, setFacebookError] = useState<string | null>(null);
   const [facebookLoading, setFacebookLoading] = useState(false);
 
-  const loginWithGoogle = useCallback((credentialResponse: CredentialResponse) => {
+  const loginWithGoogle = useCallback((profile: GoogleProfile) => {
     setGoogleError(null);
 
-    if (!credentialResponse.credential) {
-      setGoogleError("ไม่ได้รับข้อมูลจาก Google");
-      return;
-    }
-
     try {
-      const decoded = jwtDecode<GoogleJwtPayload>(credentialResponse.credential);
-
-      if (!decoded.sub || !decoded.name || !decoded.email) {
+      if (!profile.sub || !profile.name || !profile.email) {
         throw new Error("ข้อมูลบัญชี Google ไม่ครบถ้วน");
       }
 
       dispatch(setUser({
         provider: "google",
-        id: decoded.sub,
-        name: decoded.name,
-        email: decoded.email,
-        picture: decoded.picture,
+        id: profile.sub,
+        name: profile.name,
+        email: profile.email,
+        picture: profile.picture,
       }));
       dispatch(setAuthOpen(false));
       router.push("/cart");
@@ -177,18 +223,10 @@ export default function AuthModal() {
           <div className="auth-social-buttons">
             <div className="auth-provider">
               {googleClientId ? (
-                <div className="auth-google-button">
-                  <GoogleLogin
-                    onSuccess={loginWithGoogle}
-                    onError={() => setGoogleError("เข้าสู่ระบบด้วย Google ไม่สำเร็จ กรุณาลองใหม่")}
-                    theme="outline"
-                    size="large"
-                    shape="rectangular"
-                    text="continue_with"
-                    logo_alignment="left"
-                    width="352"
-                  />
-                </div>
+                <GoogleLoginButton
+                  onSuccess={loginWithGoogle}
+                  onError={setGoogleError}
+                />
               ) : (
                 <button className="auth-alt-button" disabled>ยังไม่ได้ตั้งค่า Google Client ID</button>
               )}
