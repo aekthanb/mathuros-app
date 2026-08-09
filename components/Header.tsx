@@ -40,7 +40,14 @@ export default function Header() {
                 className="account-button"
                 onClick={() => dispatch(toggleMenu())}
               >
-                <i /> {user.name}
+                <span className="account-avatar" aria-hidden="true">
+                  {user.picture && (
+                    // Google profile images are tiny, external, and already optimized.
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={user.picture} alt="" referrerPolicy="no-referrer" />
+                  )}
+                </span>
+                {user.name}
                 {/* <span>⌄</span> */}
               </button>
               {menuOpen && (
