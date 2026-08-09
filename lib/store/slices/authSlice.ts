@@ -1,7 +1,7 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
 export type AuthUser = {
-  provider: "local" | "google";
+  provider: "local" | "google" | "facebook";
   id?: string;
   name: string;
   email?: string;
