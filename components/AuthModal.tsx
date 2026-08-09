@@ -5,8 +5,8 @@ import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
 import { jwtDecode, type JwtPayload } from "jwt-decode";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
-import { login, setUser } from "../lib/store/slices/authSlice";
-import { setAuthMode, setAuthName, setAuthOpen } from "../lib/store/slices/authModalSlice";
+import { setUser } from "../lib/store/slices/authSlice";
+import { setAuthOpen } from "../lib/store/slices/authModalSlice";
 
 type GoogleJwtPayload = JwtPayload & {
   name?: string;
@@ -27,15 +27,7 @@ export default function AuthModal() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const authOpen = useAppSelector((state) => state.authModal.open);
-  const authMode = useAppSelector((state) => state.authModal.mode);
-  const authName = useAppSelector((state) => state.authModal.name);
   const [googleError, setGoogleError] = useState<string | null>(null);
-
-  function submit() {
-    dispatch(login(authName.trim() || "คุณลูกค้า"));
-    dispatch(setAuthOpen(false));
-    router.push("/cart");
-  }
 
   const loginWithGoogle = useCallback((credentialResponse: CredentialResponse) => {
     setGoogleError(null);
@@ -80,6 +72,7 @@ export default function AuthModal() {
         </div>
         <div className="auth-modal__form">
           <button className="modal-close" onClick={() => dispatch(setAuthOpen(false))} aria-label="ปิด">×</button>
+          {/* ปิดระบบสมัครสมาชิก/เข้าสู่ระบบด้วยเบอร์โทรไว้ชั่วคราว
           <div className="auth-tabs">
             <button className={authMode === "register" ? "active" : ""} onClick={() => dispatch(setAuthMode("register"))}>สมัครสมาชิก</button>
             <button className={authMode === "login" ? "active" : ""} onClick={() => dispatch(setAuthMode("login"))}>เข้าสู่ระบบ</button>
@@ -110,6 +103,7 @@ export default function AuthModal() {
           </div>
           <button className="button button--dark" onClick={submit}>{authMode === "register" ? "สมัครสมาชิกและสั่งซื้อต่อ" : "เข้าสู่ระบบ"}</button>
           <div className="auth-divider"><span /> หรือ <span /></div>
+          */}
           {googleClientId ? (
             <div className="auth-google-button">
               <GoogleLogin
