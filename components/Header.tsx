@@ -1,9 +1,14 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { logoutRequest } from "../api/auth";
+import {
+  clearAuthSession,
+  getRefreshToken,
+} from "../lib/auth/session";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
 import { logout } from "../lib/store/slices/authSlice";
 import { setMenuOpen, toggleMenu } from "../lib/store/slices/uiSlice";
@@ -13,6 +18,7 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const [loggingOut, setLoggingOut] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
   const menuOpen = useAppSelector((state) => state.ui.menuOpen);
   const cartCount = useAppSelector((state) => state.cart.items.reduce((sum, item) => sum + item.qty, 0));
@@ -20,6 +26,29 @@ export default function Header() {
   useEffect(() => {
     dispatch(setMenuOpen(false));
   }, [pathname, dispatch]);
+
+  const handleLogout = async () => {
+    if (loggingOut) return;
+
+    setLoggingOut(true);
+    const refreshToken = getRefreshToken();
+
+    try {
+      if (refreshToken) {
+        await logoutRequest({ refreshToken });
+      }
+    } catch {
+      // The server session may already be expired; local logout must still finish.
+    } finally {
+      clearAuthSession();
+      if (user?.provider === "google") googleLogout();
+      dispatch(logout());
+      dispatch(setMenuOpen(false));
+      router.push("/");
+      router.refresh();
+      setLoggingOut(false);
+    }
+  };
 
   return (
     <header className="header">
@@ -61,13 +90,10 @@ export default function Header() {
                   <Link href="/addresses">ที่อยู่จัดส่งที่บันทึกไว้</Link>
                   <button
                     className="muted"
-                    onClick={() => {
-                      if (user.provider === "google") googleLogout();
-                      dispatch(logout());
-                      router.push("/");
-                    }}
+                    onClick={handleLogout}
+                    disabled={loggingOut}
                   >
-                    ออกจากระบบ
+                    {loggingOut ? "กำลังออกจากระบบ..." : "ออกจากระบบ"}
                   </button>
                 </div>
               )}
