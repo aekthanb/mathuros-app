@@ -466,6 +466,10 @@ footer span { color: #9caaa1; }
 .auth-divider span { flex: 1; height: 1px; background: var(--line); }
 .auth-alt-button { width: 100%; padding: 15px; border: 1px solid #c2cfc1; background: none; color: var(--ink); text-align: center; font-size: 14px; cursor: pointer; }
 .auth-alt-button:hover { border-color: var(--ink); }
+.auth-alt-button:disabled { opacity: .55; cursor: not-allowed; }
+.auth-google-button { min-height: 44px; display: flex; justify-content: center; overflow: hidden; }
+.auth-google-button > div { width: 100%; }
+.auth-google-error { margin: 10px 0 0; color: #a13b2c; font-size: 12px; line-height: 1.6; text-align: center; }
 .auth-modal__form > small { display: block; margin-top: 20px; color: var(--faint); font-size: 12px; line-height: 1.8; text-align: center; }
 
 @media (max-width: 1180px) {

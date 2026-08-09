@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { googleLogout } from "@react-oauth/google";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
@@ -39,14 +40,14 @@ export default function Header() {
                 className="account-button"
                 onClick={() => dispatch(toggleMenu())}
               >
-                <i /> {user}
+                <i /> {user.name}
                 {/* <span>⌄</span> */}
               </button>
               {menuOpen && (
                 <div className="account-menu">
                   <div>
-                    <strong>{user}</strong>
-                    <small>แต้มคงเหลือ ๗๓</small>
+                    <strong>{user.name}</strong>
+                    <small>{user.email ?? "แต้มคงเหลือ ๗๓"}</small>
                   </div>
                   <Link href="/orders">ประวัติการสั่งซื้อ</Link>
                   <Link href="/track">ติดตามคำสั่งซื้อล่าสุด</Link>
@@ -54,6 +55,7 @@ export default function Header() {
                   <button
                     className="muted"
                     onClick={() => {
+                      if (user.provider === "google") googleLogout();
                       dispatch(logout());
                       router.push("/");
                     }}

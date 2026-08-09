@@ -1,7 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
+export type AuthUser = {
+  provider: "local" | "google";
+  id?: string;
+  name: string;
+  email?: string;
+  picture?: string;
+};
+
 type AuthState = {
-  user: string | null;
+  user: AuthUser | null;
 };
 
 const initialState: AuthState = {
@@ -13,6 +21,12 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     login(state, action: PayloadAction<string>) {
+      state.user = {
+        provider: "local",
+        name: action.payload,
+      };
+    },
+    setUser(state, action: PayloadAction<AuthUser>) {
       state.user = action.payload;
     },
     logout(state) {
@@ -21,5 +35,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

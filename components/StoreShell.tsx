@@ -1,5 +1,6 @@
 "use client";
 
+import { GoogleOAuthProvider } from "@react-oauth/google";
 import { StoreProvider } from "./StoreProvider";
 import Header from "./Header";
 import Footer from "./Footer";
@@ -7,8 +8,10 @@ import AssistantChat from "./AssistantChat";
 import AuthModal from "./AuthModal";
 import BackToTop from "./BackToTop";
 
+const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
+
 export default function StoreShell({ children }: { children: React.ReactNode }) {
-  return (
+  const store = (
     <StoreProvider>
       <div className="store-layout">
         <div className="store-main">
@@ -22,5 +25,13 @@ export default function StoreShell({ children }: { children: React.ReactNode }) 
         <BackToTop />
       </div>
     </StoreProvider>
+  );
+
+  if (!googleClientId) return store;
+
+  return (
+    <GoogleOAuthProvider clientId={googleClientId} locale="th">
+      {store}
+    </GoogleOAuthProvider>
   );
 }
