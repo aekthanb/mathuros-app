@@ -174,7 +174,7 @@ export default function AuthModal() {
       <div className="auth-modal" role="dialog" aria-modal="true" aria-labelledby="auth-heading">
         <div className="auth-modal__intro">
           <p className="eyebrow">สมาชิกมธุรส</p>
-          <h2>สมัครก่อนสั่งซื้อ เพื่อให้เราตัดผลไม้ให้ถูกรอบ</h2>
+          <h2>สั่งง่าย ได้ผลไม้สดตรงรอบทุกครั้ง</h2>
           <div className="auth-benefits">
             {BENEFITS.map((text) => (
               <div key={text}><span>✓</span><span>{text}</span></div>
@@ -184,9 +184,9 @@ export default function AuthModal() {
         <div className="auth-modal__form">
           <button className="modal-close" onClick={() => dispatch(setAuthOpen(false))} aria-label="ปิด">×</button>
           <div className="auth-form-heading">
-            <p className="eyebrow">เข้าสู่ระบบสมาชิก</p>
-            <h2 id="auth-heading">ยินดีต้อนรับสู่มธุรส</h2>
-            <p>เลือกบัญชีที่ต้องการใช้ เพื่อสั่งซื้อและติดตามผลไม้ของคุณ</p>
+            <p className="eyebrow">เริ่มต้นกับมธุรส</p>
+            <h2 id="auth-heading">สมัครหรือเข้าสู่ระบบ</h2>
+            <p>เลือกบัญชีที่ต้องการใช้ หากยังไม่เคยสมัคร เราจะสร้างบัญชีสมาชิกให้โดยอัตโนมัติ</p>
           </div>
           {/* ปิดระบบสมัครสมาชิก/เข้าสู่ระบบด้วยเบอร์โทรไว้ชั่วคราว
           <div className="auth-tabs">
@@ -270,7 +270,7 @@ export default function AuthModal() {
               <path d="m9.2 12 1.8 1.8 3.8-4" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
             <p>
-              ข้อมูลบัญชีของคุณจะใช้สำหรับการเป็นสมาชิกมธุรสเท่านั้น
+              ข้อมูลบัญชีของคุณจะใช้สำหรับสมัครและเข้าสู่ระบบมธุรสเท่านั้น
               <small>เมื่อดำเนินการต่อ ถือว่าคุณยอมรับเงื่อนไขการใช้งานและนโยบายความเป็นส่วนตัว</small>
             </p>
           </div>
