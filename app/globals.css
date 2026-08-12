@@ -433,9 +433,9 @@ footer span { color: #9caaa1; }
 .pick-info small { margin-top: 5px; color: var(--faint); font-size: 12px; line-height: 1.6; }
 .pick b { font: 13px "IBM Plex Mono", monospace; white-space: nowrap; }
 .assistant-footer { flex-shrink: 0; padding: 16px 24px 22px; border-top: 1px solid var(--line); }
-.quick-prompts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-.quick-prompts button { padding: 6px 13px; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: white; cursor: pointer; font-size: 12px; }
-.quick-prompts button:hover { border-color: var(--ink); color: var(--ink); }
+.quick-prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+.quick-prompts button { padding: 9px 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: white; cursor: pointer; font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+.quick-prompts button:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); background: var(--wash); }
 .quick-prompts button:disabled { opacity: .5; cursor: not-allowed; }
 .chat-error { margin-bottom: 14px; padding: 10px 12px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; border: 1px solid #d8b4a0; background: #fdf4ee; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .chat-error button { padding: 0; border: 0; background: none; color: var(--ink); cursor: pointer; font-size: 12px; text-decoration: underline; }
