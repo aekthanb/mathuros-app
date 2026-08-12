@@ -5,6 +5,8 @@ import dynamic from "next/dynamic";
 import {
   addressCoords,
   addressLines,
+  formatThaiPhoneNumber,
+  normalizeAddressCoordinate,
   validateAddressInput,
   type CreateAddressInput,
   type SavedAddress,
@@ -49,7 +51,7 @@ function toForm(address: SavedAddress): FormState {
   return {
     label: address.label,
     recipientName: address.recipientName,
-    recipientPhone: address.recipientPhone,
+    recipientPhone: formatThaiPhoneNumber(address.recipientPhone),
     addressLine: address.addressLine,
     subDistrict: address.subDistrict,
     district: address.district,
@@ -138,6 +140,13 @@ export default function AddressesPage() {
   async function submitForm() {
     if (!form) return;
 
+    const latitude = normalizeAddressCoordinate(coords.lat);
+    const longitude = normalizeAddressCoordinate(coords.lng);
+    if (latitude == null || longitude == null) {
+      setFormError("พิกัดที่อยู่ไม่ถูกต้อง กรุณาเลือกตำแหน่งบนแผนที่อีกครั้ง");
+      return;
+    }
+
     const invalid = validateAddressInput(form);
     if (invalid) {
       setFormError(invalid);
@@ -154,8 +163,8 @@ export default function AddressesPage() {
       district: form.district.trim(),
       province: form.province.trim(),
       postalCode: form.postalCode.trim(),
-      latitude: coords.lat,
-      longitude: coords.lng,
+      latitude,
+      longitude,
       note: form.note.trim(),
     };
 
@@ -254,7 +263,21 @@ export default function AddressesPage() {
           <AddressSearch onSelect={handleAddressSearchSelect} />
           <div className="form-grid">
             <label>ชื่อผู้รับ<input value={form.recipientName} onChange={setField("recipientName")} placeholder="ชื่อ–นามสกุล" /></label>
-            <label>เบอร์โทร<input value={form.recipientPhone} onChange={setField("recipientPhone")} placeholder="08X-XXX-XXXX" /></label>
+            <label>
+              เบอร์โทร
+              <input
+                type="tel"
+                inputMode="numeric"
+                autoComplete="tel"
+                maxLength={12}
+                value={form.recipientPhone}
+                onChange={(event) => setForm((current) => current ? {
+                  ...current,
+                  recipientPhone: formatThaiPhoneNumber(event.target.value),
+                } : current)}
+                placeholder="08X-XXX-XXXX"
+              />
+            </label>
             <label className="full">ที่อยู่<input value={form.addressLine} onChange={setField("addressLine")} placeholder="บ้านเลขที่ อาคาร ซอย ถนน" /></label>
             <label>แขวง / ตำบล<input value={form.subDistrict} onChange={setField("subDistrict")} placeholder="คลองตันเหนือ" /></label>
             <label>เขต / อำเภอ<input value={form.district} onChange={setField("district")} placeholder="วัฒนา" /></label>

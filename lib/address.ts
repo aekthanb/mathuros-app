@@ -34,6 +34,18 @@ export type CreateAddressInput = {
 /** PATCH /addresses/:id ไม่รับ isDefault — ต้องใช้ PATCH /addresses/:id/default แทน */
 export type UpdateAddressInput = Partial<Omit<CreateAddressInput, "isDefault">>;
 
+export function formatThaiPhoneNumber(value: string): string {
+  const digits = value.replace(/\D/g, "").slice(0, 10);
+  if (digits.length <= 3) return digits;
+  if (digits.length <= 6) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
+  return `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`;
+}
+
+export function normalizeAddressCoordinate(value: unknown): number | null {
+  const coordinate = Number(value);
+  return Number.isFinite(coordinate) ? Number(coordinate.toFixed(4)) : null;
+}
+
 export const ADDRESS_FIELD_LABELS: Record<keyof CreateAddressInput, string> = {
   label: "ชื่อเรียกที่อยู่",
   recipientName: "ชื่อผู้รับ",
@@ -69,6 +81,9 @@ export function validateAddressInput(input: Partial<CreateAddressInput>): string
   if (!/^\d{5}$/.test(String(input.postalCode).trim())) {
     return "รหัสไปรษณีย์ต้องเป็นตัวเลข ๕ หลัก";
   }
+  if (String(input.recipientPhone).replace(/\D/g, "").length !== 10) {
+    return "เบอร์โทรศัพท์ต้องเป็นตัวเลข ๑๐ หลัก";
+  }
   return null;
 }
 
@@ -81,8 +96,10 @@ export function addressLines(address: SavedAddress): string[] {
 }
 
 export function addressCoords(address: SavedAddress): string {
-  if (address.latitude == null || address.longitude == null) return "ยังไม่ได้ปักหมุดบนแผนที่";
-  return `${address.latitude.toFixed(4)}° N, ${address.longitude.toFixed(4)}° E`;
+  const latitude = normalizeAddressCoordinate(address.latitude);
+  const longitude = normalizeAddressCoordinate(address.longitude);
+  if (latitude == null || longitude == null) return "ยังไม่ได้ปักหมุดบนแผนที่";
+  return `${latitude.toFixed(4)}° N, ${longitude.toFixed(4)}° E`;
 }
 
 /** ที่อยู่หลักมาก่อน จากนั้นเรียงตามวันที่บันทึก — ให้ตรงกับลำดับที่ GET /addresses ส่งมา */

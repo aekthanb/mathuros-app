@@ -4,7 +4,13 @@ import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { baht } from "../../lib/data";
-import { addressLines, validateAddressInput, type CreateAddressInput } from "../../lib/address";
+import {
+  addressLines,
+  formatThaiPhoneNumber,
+  normalizeAddressCoordinate,
+  validateAddressInput,
+  type CreateAddressInput,
+} from "../../lib/address";
 import CartLine from "../../components/CartLine";
 import AddressSearch, { type AddressSearchResult } from "../../components/AddressSearch";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
@@ -103,6 +109,13 @@ export default function CartPage() {
 
     // บันทึกที่อยู่ใหม่เข้าสมุดที่อยู่ก่อนไปหน้าชำระเงิน ถ้าผู้ใช้ติ๊กไว้
     if (showAddressForm && saveNewAddress) {
+      const latitude = normalizeAddressCoordinate(coords.lat);
+      const longitude = normalizeAddressCoordinate(coords.lng);
+      if (latitude == null || longitude == null) {
+        setSaveError("พิกัดที่อยู่ไม่ถูกต้อง กรุณาเลือกตำแหน่งบนแผนที่อีกครั้ง");
+        return;
+      }
+
       const payload: CreateAddressInput = {
         label: addressLabel.trim() || "ที่อยู่จัดส่ง",
         recipientName: recipientName.trim(),
@@ -112,8 +125,8 @@ export default function CartPage() {
         district: district.trim(),
         province: province.trim(),
         postalCode: postcode.trim(),
-        latitude: coords.lat,
-        longitude: coords.lng,
+        latitude,
+        longitude,
         isDefault: savedAddresses.length === 0,
       };
 
@@ -211,7 +224,15 @@ export default function CartPage() {
                     </label>
                     <label>
                       เบอร์โทร
-                      <input value={recipientPhone} onChange={(event) => setRecipientPhone(event.target.value)} placeholder="08X-XXX-XXXX" />
+                      <input
+                        type="tel"
+                        inputMode="numeric"
+                        autoComplete="tel"
+                        maxLength={12}
+                        value={recipientPhone}
+                        onChange={(event) => setRecipientPhone(formatThaiPhoneNumber(event.target.value))}
+                        placeholder="08X-XXX-XXXX"
+                      />
                     </label>
                     <label className="full">
                       ที่อยู่
