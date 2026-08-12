@@ -1,19 +1,16 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import type { SessionUser } from "../../auth/session";
 
-export type AuthUser = {
-  provider: "local" | "google" | "facebook";
-  id?: string;
-  name: string;
-  email?: string;
-  picture?: string;
-};
+export type AuthUser = SessionUser;
 
 type AuthState = {
   user: AuthUser | null;
+  hydrated: boolean;
 };
 
 const initialState: AuthState = {
   user: null,
+  hydrated: false,
 };
 
 const authSlice = createSlice({
@@ -25,15 +22,22 @@ const authSlice = createSlice({
         provider: "local",
         name: action.payload,
       };
+      state.hydrated = true;
     },
     setUser(state, action: PayloadAction<AuthUser>) {
       state.user = action.payload;
+      state.hydrated = true;
+    },
+    hydrateAuth(state, action: PayloadAction<AuthUser | null>) {
+      state.user = action.payload;
+      state.hydrated = true;
     },
     logout(state) {
       state.user = null;
+      state.hydrated = true;
     },
   },
 });
 
-export const { login, logout, setUser } = authSlice.actions;
+export const { hydrateAuth, login, logout, setUser } = authSlice.actions;
 export default authSlice.reducer;

@@ -32,6 +32,7 @@ button:focus-visible, input:focus-visible, a:focus-visible { outline: 2px solid 
 .brand strong { display: block; font: 600 27px/1 "Anuphan", sans-serif; letter-spacing: .04em; }
 .brand small { display: block; margin-top: 6px; padding-left: 5px; color: var(--faint); font: 9px/1 "IBM Plex Mono", monospace; letter-spacing: .42em; }
 .header-actions { display: flex; justify-content: flex-end; align-items: center; gap: 25px; }
+.login-status { width: 62px; height: 16px; border-radius: 999px; background: var(--wash); }
 .cart-button { display: flex; align-items: center; gap: 9px; padding: 9px 18px; border: 1px solid var(--ink); border-radius: 999px; background: white; cursor: pointer; font-size: 14px; }
 .cart-button:hover { color: white; background: var(--ink); }
 .cart-button span { width: 20px; height: 20px; display: grid; place-items: center; border-radius: 50%; color: white; background: var(--orange); font: 11px "IBM Plex Mono", monospace; }

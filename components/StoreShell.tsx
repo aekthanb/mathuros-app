@@ -7,12 +7,14 @@ import Footer from "./Footer";
 import AssistantChat from "./AssistantChat";
 import AuthModal from "./AuthModal";
 import BackToTop from "./BackToTop";
+import AuthSessionHydrator from "./AuthSessionHydrator";
 
 const googleClientId = process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID;
 
 export default function StoreShell({ children }: { children: React.ReactNode }) {
   const store = (
     <StoreProvider>
+      <AuthSessionHydrator />
       <div className="store-layout">
         <div className="store-main">
           <div className="announcement">จัดส่งฟรีทั่วประเทศ เมื่อสั่งครบ ฿1,500 — ตัดจากสวนเช้านี้ ถึงมือคุณพรุ่งนี้</div>

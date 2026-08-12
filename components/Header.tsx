@@ -20,6 +20,7 @@ export default function Header() {
   const dispatch = useAppDispatch();
   const [loggingOut, setLoggingOut] = useState(false);
   const user = useAppSelector((state) => state.auth.user);
+  const authHydrated = useAppSelector((state) => state.auth.hydrated);
   const menuOpen = useAppSelector((state) => state.ui.menuOpen);
   const cartCount = useAppSelector((state) => state.cart.items.reduce((sum, item) => sum + item.qty, 0));
 
@@ -63,7 +64,9 @@ export default function Header() {
           <small>MATHUROS</small>
         </Link>
         <div className="header-actions">
-          {user ? (
+          {!authHydrated ? (
+            <span className="login-status" role="status" aria-label="กำลังโหลดข้อมูลผู้ใช้" />
+          ) : user ? (
             <div className="account">
               <button
                 className="account-button"

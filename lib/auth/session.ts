@@ -12,8 +12,17 @@ export type AuthSessionResponse = {
   user: AuthApiUser;
 };
 
+export type SessionUser = {
+  provider: "local" | "google" | "facebook";
+  id?: string;
+  name: string;
+  email?: string;
+  picture?: string;
+};
+
 const ACCESS_TOKEN_COOKIE = "mathuros_access_token";
 const REFRESH_TOKEN_COOKIE = "mathuros_refresh_token";
+const USER_SESSION_KEY = "mathuros_user";
 const REFRESH_TOKEN_MAX_AGE = 60 * 60 * 24 * 30;
 
 function readCookie(name: string): string | null {
@@ -42,6 +51,33 @@ export function getRefreshToken(): string | null {
   return readCookie(REFRESH_TOKEN_COOKIE);
 }
 
+export function getUserSession(): SessionUser | null {
+  if (typeof window === "undefined") return null;
+
+  const value = window.sessionStorage.getItem(USER_SESSION_KEY);
+  if (!value) return null;
+
+  try {
+    const user = JSON.parse(value) as Partial<SessionUser>;
+    const validProvider = user.provider === "local" || user.provider === "google" || user.provider === "facebook";
+    if (!validProvider || typeof user.name !== "string") return null;
+    return user as SessionUser;
+  } catch {
+    window.sessionStorage.removeItem(USER_SESSION_KEY);
+    return null;
+  }
+}
+
+export function setUserSession(user: SessionUser): void {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.setItem(USER_SESSION_KEY, JSON.stringify(user));
+}
+
+export function clearUserSession(): void {
+  if (typeof window === "undefined") return;
+  window.sessionStorage.removeItem(USER_SESSION_KEY);
+}
+
 export function setAuthSession({
   accessToken,
   refreshToken,
@@ -54,5 +90,6 @@ export function setAuthSession({
 export function clearAuthSession(): void {
   writeCookie(ACCESS_TOKEN_COOKIE, "", 0);
   writeCookie(REFRESH_TOKEN_COOKIE, "", 0);
+  clearUserSession();
 }
 

@@ -10,7 +10,7 @@ import {
   loginWithFacebookRequest,
   loginWithGoogleRequest,
 } from "../api/auth";
-import { setAuthSession } from "../lib/auth/session";
+import { setAuthSession, setUserSession, type SessionUser } from "../lib/auth/session";
 import { useAppDispatch, useAppSelector } from "../lib/store/hooks";
 import { setUser } from "../lib/store/slices/authSlice";
 import { setAuthOpen } from "../lib/store/slices/authModalSlice";
@@ -82,15 +82,16 @@ export default function AuthModal() {
 
         setAuthSession(session);
 
-        dispatch(
-          setUser({
-            provider: "google",
-            id: session.user.id,
-            name: session.user.name || session.user.email,
-            email: session.user.email,
-            picture: session.user.avatarUrl || undefined,
-          }),
-        );
+        const user: SessionUser = {
+          provider: "google",
+          id: session.user.id,
+          name: session.user.name || session.user.email,
+          email: session.user.email,
+          picture: session.user.avatarUrl || undefined,
+        };
+        setUserSession(user);
+
+        dispatch(setUser(user));
         dispatch(setAuthOpen(false));
       } catch (error) {
         setGoogleError(error instanceof Error ? error.message : "เข้าสู่ระบบด้วย Google ไม่สำเร็จ");
@@ -131,15 +132,16 @@ export default function AuthModal() {
 
       setAuthSession(session);
 
-      dispatch(
-        setUser({
-          provider: "facebook",
-          id: session.user.id,
-          name: session.user.name || session.user.email,
-          email: session.user.email,
-          picture: session.user.avatarUrl || undefined,
-        }),
-      );
+      const user: SessionUser = {
+        provider: "facebook",
+        id: session.user.id,
+        name: session.user.name || session.user.email,
+        email: session.user.email,
+        picture: session.user.avatarUrl || undefined,
+      };
+      setUserSession(user);
+
+      dispatch(setUser(user));
       dispatch(setAuthOpen(false));
     } catch (error) {
       setFacebookError(
