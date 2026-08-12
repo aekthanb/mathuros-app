@@ -188,6 +188,8 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .cart-line { display: grid; grid-template-columns: 130px 1fr auto; gap: 22px; padding: 23px 0; border-top: 1px solid var(--line); }
 .cart-line:first-child { border-top: 0; padding-top: 0; }
 .cart-thumb { width: 130px; aspect-ratio: 1; padding: 8px; }
+.cart-thumb:has(img) { padding: 0; align-items: stretch; overflow: hidden; }
+.cart-thumb img { object-fit: cover; }
 .cart-thumb span { font-size: 9px; }
 .cart-line h3 { margin: 7px 0; font-size: 20px; font-weight: 500; }
 .cart-line p { margin: 0; color: var(--faint); font-size: 13px; }

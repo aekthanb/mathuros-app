@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
-import { baht } from "../../lib/data";
+import { PRODUCTS, baht } from "../../lib/data";
 import {
   addressLines,
   formatThaiPhoneNumber,
@@ -191,6 +191,7 @@ export default function CartPage() {
               <CartLine
                 key={item.id}
                 label={item.label}
+                image={PRODUCTS.find((product) => product.sku === item.sku)?.image ?? (item.sku === "special-box" ? "/img/index/fruit-premium-1.png" : undefined)}
                 name={item.name}
                 detail={`${item.sizeLabel} · ส่งพรุ่งนี้`}
                 price={baht(item.unitPrice * item.qty)}
@@ -200,7 +201,9 @@ export default function CartPage() {
               />
             ))
           )}
+          {/*
           <div className="gift-note"><span>ส่งเป็นของขวัญ</span><p>เพิ่มการ์ดเขียนมือและห่อริบบิ้นให้ฟรี</p><button>เพิ่มข้อความในการ์ด</button></div>
+          */}
 
           {items.length > 0 && (
             <div className="address-section">

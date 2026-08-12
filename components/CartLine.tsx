@@ -1,5 +1,8 @@
+import Image from "next/image";
+
 export default function CartLine({
   label,
+  image,
   name,
   detail,
   price,
@@ -8,6 +11,7 @@ export default function CartLine({
   onRemove,
 }: {
   label: string;
+  image?: string;
   name: string;
   detail: string;
   price: string;
@@ -17,7 +21,13 @@ export default function CartLine({
 }) {
   return (
     <article className="cart-line">
-      <div className="cart-thumb"><span>{label}</span></div>
+      <div className="cart-thumb">
+        {image ? (
+          <Image src={image} alt={name} fill sizes="(max-width: 540px) 90px, 130px" />
+        ) : (
+          <span>{label}</span>
+        )}
+      </div>
       <div>
         <h3>{name}</h3>
         <p>{detail}</p>
