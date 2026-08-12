@@ -19,10 +19,12 @@ export default function ListPage() {
       </div>
       <div className="filters">
         <button className="active">ทั้งหมด</button>
+        {/*
         <button>ผลไม้ไทย</button>
         <button>ผลไม้นำเข้า</button>
         <button>กล่องของขวัญ</button>
         <button>ไม่เกิน ฿1,000</button>
+        */}
       </div>
       <div className="product-grid product-grid--all">
         {PRODUCTS.map((item) => <ProductCard key={item.sku} product={item} />)}
