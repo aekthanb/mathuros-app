@@ -68,6 +68,8 @@ export default function CartPage() {
   function handleAddressSearchSelect(result: AddressSearchResult) {
     setCoords({ lat: result.lat, lng: result.lng });
     if (result.addressLine) setAddressText(result.addressLine);
+    if (result.subDistrict) setSubDistrict(result.subDistrict);
+    if (result.district) setDistrict(result.district);
     if (result.province) setProvince(result.province);
     if (result.postcode) setPostcode(result.postcode);
   }

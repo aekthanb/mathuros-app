@@ -7,6 +7,8 @@ export type AddressSearchResult = {
   lng: number;
   displayName: string;
   addressLine?: string;
+  subDistrict?: string;
+  district?: string;
   province?: string;
   postcode?: string;
 };
@@ -57,6 +59,18 @@ function addressLineFromAddress(address: NominatimAddress): string | undefined {
   return parts.length > 0 ? parts.join(" ") : undefined;
 }
 
+function subDistrictFromAddress(address: NominatimAddress): string | undefined {
+  const value = address.quarter ?? address.neighbourhood ?? address.suburb ?? address.village;
+  return value?.replace(/^(แขวง|ตำบล)\s*/, "");
+}
+
+function districtFromAddress(address: NominatimAddress): string | undefined {
+  // Bangkok is commonly returned as quarter → suburb → city, where suburb is the district.
+  const bangkokDistrict = address.quarter && address.suburb ? address.suburb : undefined;
+  const value = address.city_district ?? address.district ?? address.county ?? bangkokDistrict;
+  return value?.replace(/^(เขต|อำเภอ)\s*/, "");
+}
+
 export default function AddressSearch({ onSelect }: { onSelect: (result: AddressSearchResult) => void }) {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<AddressSearchResult[]>([]);
@@ -72,13 +86,7 @@ export default function AddressSearch({ onSelect }: { onSelect: (result: Address
       return;
     }
     const trimmed = query.trim();
-    if (trimmed.length < 3) {
-      setResults([]);
-      setOpen(false);
-      setError(null);
-      setLoading(false);
-      return;
-    }
+    if (trimmed.length < 3) return;
 
     const controller = new AbortController();
     const timer = setTimeout(async () => {
@@ -104,6 +112,8 @@ export default function AddressSearch({ onSelect }: { onSelect: (result: Address
             lng: parseFloat(item.lon),
             displayName: item.display_name,
             addressLine: item.address ? addressLineFromAddress(item.address) : undefined,
+            subDistrict: item.address ? subDistrictFromAddress(item.address) : undefined,
+            district: item.address ? districtFromAddress(item.address) : undefined,
             province: item.address ? provinceFromAddress(item.address) : undefined,
             postcode: item.address?.postcode,
           }))
@@ -125,6 +135,16 @@ export default function AddressSearch({ onSelect }: { onSelect: (result: Address
       controller.abort();
     };
   }, [query]);
+
+  function handleQueryChange(nextQuery: string) {
+    setQuery(nextQuery);
+    if (nextQuery.trim().length < 3) {
+      setResults([]);
+      setOpen(false);
+      setError(null);
+      setLoading(false);
+    }
+  }
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
@@ -148,7 +168,7 @@ export default function AddressSearch({ onSelect }: { onSelect: (result: Address
     <div className="address-search" ref={containerRef}>
       <input
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => handleQueryChange(event.target.value)}
         onFocus={() => (results.length > 0 || error) && setOpen(true)}
         placeholder="ค้นหาที่อยู่ เช่น ชื่อถนน ตำบล หรือสถานที่"
       />

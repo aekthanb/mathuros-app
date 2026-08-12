@@ -108,6 +108,8 @@ export default function AddressesPage() {
     setForm((current) => current ? {
       ...current,
       addressLine: result.addressLine || current.addressLine,
+      subDistrict: result.subDistrict || current.subDistrict,
+      district: result.district || current.district,
       province: result.province || current.province,
       postalCode: result.postcode || current.postalCode,
     } : current);
@@ -143,7 +145,7 @@ export default function AddressesPage() {
     }
     setFormError(null);
 
-    const payload: CreateAddressInput = {
+    const payload: Omit<CreateAddressInput, "isDefault"> = {
       label: form.label.trim(),
       recipientName: form.recipientName.trim(),
       recipientPhone: form.recipientPhone.trim(),
@@ -154,12 +156,15 @@ export default function AddressesPage() {
       postalCode: form.postalCode.trim(),
       latitude: coords.lat,
       longitude: coords.lng,
-      ...(form.note.trim() ? { note: form.note.trim() } : {}),
+      note: form.note.trim(),
     };
 
     const result = editingId
       ? await dispatch(updateAddress({ id: editingId, changes: payload }))
-      : await dispatch(createAddress(payload));
+      : await dispatch(createAddress({
+          ...payload,
+          isDefault: items.length === 0,
+        }));
 
     if (result.meta.requestStatus === "fulfilled") closeForm();
   }
