@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import {
   addressCoords,
   addressLines,
@@ -8,6 +9,7 @@ import {
   type CreateAddressInput,
   type SavedAddress,
 } from "../../lib/address";
+import AddressSearch, { type AddressSearchResult } from "../../components/AddressSearch";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
 import {
   createAddress,
@@ -17,6 +19,17 @@ import {
   updateAddress,
 } from "../../lib/store/slices/addressSlice";
 import { setAuthMode, setAuthOpen } from "../../lib/store/slices/authModalSlice";
+
+const AddressMap = dynamic(() => import("../../components/AddressMap"), {
+  ssr: false,
+  loading: () => <div className="address-map__loading">กำลังโหลดแผนที่…</div>,
+});
+
+const DEFAULT_COORDS = { lat: 13.7563, lng: 100.5018 };
+
+function formatCoords(lat: number, lng: number) {
+  return `${lat.toFixed(4)}° N, ${lng.toFixed(4)}° E`;
+}
 
 type FormState = CreateAddressInput & { note: string };
 
@@ -53,6 +66,9 @@ export default function AddressesPage() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
+  const [coords, setCoords] = useState(DEFAULT_COORDS);
+  const [locating, setLocating] = useState(false);
+  const [locateError, setLocateError] = useState<string | null>(null);
 
   useEffect(() => {
     dispatch(fetchAddresses());
@@ -64,12 +80,19 @@ export default function AddressesPage() {
   function openCreate() {
     setEditingId(null);
     setFormError(null);
+    setLocateError(null);
+    setCoords(DEFAULT_COORDS);
     setForm({ ...EMPTY_FORM });
   }
 
   function openEdit(address: SavedAddress) {
     setEditingId(address.id);
     setFormError(null);
+    setLocateError(null);
+    setCoords({
+      lat: address.latitude ?? DEFAULT_COORDS.lat,
+      lng: address.longitude ?? DEFAULT_COORDS.lng,
+    });
     setForm(toForm(address));
   }
 
@@ -77,6 +100,37 @@ export default function AddressesPage() {
     setForm(null);
     setEditingId(null);
     setFormError(null);
+    setLocateError(null);
+  }
+
+  function handleAddressSearchSelect(result: AddressSearchResult) {
+    setCoords({ lat: result.lat, lng: result.lng });
+    setForm((current) => current ? {
+      ...current,
+      addressLine: result.addressLine || current.addressLine,
+      province: result.province || current.province,
+      postalCode: result.postcode || current.postalCode,
+    } : current);
+  }
+
+  function locateMe() {
+    if (!navigator.geolocation) {
+      setLocateError("เบราว์เซอร์นี้ไม่รองรับการระบุตำแหน่ง");
+      return;
+    }
+    setLocating(true);
+    setLocateError(null);
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setCoords({ lat: position.coords.latitude, lng: position.coords.longitude });
+        setLocating(false);
+      },
+      () => {
+        setLocateError("ไม่สามารถเข้าถึงตำแหน่งได้ กรุณาอนุญาตการเข้าถึงตำแหน่ง");
+        setLocating(false);
+      },
+      { enableHighAccuracy: true, timeout: 10000 }
+    );
   }
 
   async function submitForm() {
@@ -98,6 +152,8 @@ export default function AddressesPage() {
       district: form.district.trim(),
       province: form.province.trim(),
       postalCode: form.postalCode.trim(),
+      latitude: coords.lat,
+      longitude: coords.lng,
       ...(form.note.trim() ? { note: form.note.trim() } : {}),
     };
 
@@ -190,15 +246,30 @@ export default function AddressesPage() {
       {form && (
         <div className="address-form">
           <h2>{editingId ? "แก้ไขที่อยู่" : "เพิ่มที่อยู่ใหม่"}</h2>
+          <AddressSearch onSelect={handleAddressSearchSelect} />
           <div className="form-grid">
-            <label>ชื่อเรียกที่อยู่<input value={form.label} onChange={setField("label")} placeholder="บ้าน / ออฟฟิศ" /></label>
             <label>ชื่อผู้รับ<input value={form.recipientName} onChange={setField("recipientName")} placeholder="ชื่อ–นามสกุล" /></label>
-            <label>เบอร์โทรศัพท์<input value={form.recipientPhone} onChange={setField("recipientPhone")} placeholder="08X-XXX-XXXX" /></label>
-            <label>จังหวัด<input value={form.province} onChange={setField("province")} placeholder="กรุงเทพมหานคร" /></label>
+            <label>เบอร์โทร<input value={form.recipientPhone} onChange={setField("recipientPhone")} placeholder="08X-XXX-XXXX" /></label>
             <label className="full">ที่อยู่<input value={form.addressLine} onChange={setField("addressLine")} placeholder="บ้านเลขที่ อาคาร ซอย ถนน" /></label>
-            <label>แขวง / ตำบล<input value={form.subDistrict} onChange={setField("subDistrict")} /></label>
-            <label>เขต / อำเภอ<input value={form.district} onChange={setField("district")} /></label>
-            <label>รหัสไปรษณีย์<input inputMode="numeric" value={form.postalCode} onChange={setField("postalCode")} placeholder="10110" /></label>
+            <label>แขวง / ตำบล<input value={form.subDistrict} onChange={setField("subDistrict")} placeholder="คลองตันเหนือ" /></label>
+            <label>เขต / อำเภอ<input value={form.district} onChange={setField("district")} placeholder="วัฒนา" /></label>
+            <label>จังหวัด<input value={form.province} onChange={setField("province")} placeholder="เลือกจังหวัด" /></label>
+            <label>รหัสไปรษณีย์<input inputMode="numeric" value={form.postalCode} onChange={setField("postalCode")} placeholder="10XXX" /></label>
+          </div>
+          <div className="address-map address-map--picker">
+            <AddressMap
+              lat={coords.lat}
+              lng={coords.lng}
+              onMove={(lat, lng) => setCoords({ lat, lng })}
+            />
+            <span>{formatCoords(coords.lat, coords.lng)} · คลิกหรือลากหมุดเพื่อเลือกจุด · คลิกแผนที่แล้วเลื่อนล้อเมาส์เพื่อซูม</span>
+            <button type="button" className="address-map__locate" onClick={locateMe} disabled={locating}>
+              {locating ? "กำลังค้นหา…" : "ใช้ตำแหน่งปัจจุบัน"}
+            </button>
+          </div>
+          {locateError && <p className="address-map__error">{locateError}</p>}
+          <div className="form-grid address-form__details">
+            <label>ชื่อเรียกที่อยู่<input value={form.label} onChange={setField("label")} placeholder="บ้าน / ออฟฟิศ" /></label>
             <label>หมายเหตุการจัดส่ง<input value={form.note} onChange={setField("note")} placeholder="ฝากไว้กับนิติบุคคลได้" /></label>
           </div>
           {formError && <p className="address-map__error">{formError}</p>}

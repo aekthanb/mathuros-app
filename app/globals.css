@@ -388,6 +388,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-add-card small { max-width: 260px; color: var(--faint); font-size: 13px; line-height: 1.8; }
 .address-form { margin-top: 25px; padding: 30px; border: 1px solid var(--line); }
 .address-form h2 { margin-top: 0; }
+.address-form__details { margin-top: 18px; }
 .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .form-grid label { display: flex; flex-direction: column; gap: 7px; font-size: 13px; }
 .form-grid .full { grid-column: span 2; }
