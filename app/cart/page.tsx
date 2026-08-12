@@ -45,7 +45,6 @@ export default function CartPage() {
 
   const [selectedAddress, setSelectedAddress] = useState("");
   const [useNewAddress, setUseNewAddress] = useState(false);
-  const [saveNewAddress, setSaveNewAddress] = useState(false);
   const showAddressForm = !user || useNewAddress || savedAddresses.length === 0;
 
   const [coords, setCoords] = useState(DEFAULT_COORDS);
@@ -60,6 +59,7 @@ export default function CartPage() {
   const [district, setDistrict] = useState("");
   const [province, setProvince] = useState("");
   const [postcode, setPostcode] = useState("");
+  const [addressNote, setAddressNote] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -100,6 +100,67 @@ export default function CartPage() {
     );
   }
 
+  function resetAddressForm() {
+    setAddressLabel("");
+    setRecipientName("");
+    setRecipientPhone("");
+    setAddressText("");
+    setSubDistrict("");
+    setDistrict("");
+    setProvince("");
+    setPostcode("");
+    setAddressNote("");
+    setCoords(DEFAULT_COORDS);
+    setLocateError(null);
+    setSaveError(null);
+  }
+
+  async function saveShippingAddress() {
+    if (!user) {
+      dispatch(setAuthMode("register"));
+      dispatch(setAuthOpen(true));
+      return;
+    }
+
+    const latitude = normalizeAddressCoordinate(coords.lat);
+    const longitude = normalizeAddressCoordinate(coords.lng);
+    if (latitude == null || longitude == null) {
+      setSaveError("พิกัดที่อยู่ไม่ถูกต้อง กรุณาเลือกตำแหน่งบนแผนที่อีกครั้ง");
+      return;
+    }
+
+    const payload: CreateAddressInput = {
+      label: addressLabel.trim(),
+      recipientName: recipientName.trim(),
+      recipientPhone: recipientPhone.trim(),
+      addressLine: addressText.trim(),
+      subDistrict: subDistrict.trim(),
+      district: district.trim(),
+      province: province.trim(),
+      postalCode: postcode.trim(),
+      latitude,
+      longitude,
+      note: addressNote.trim(),
+      isDefault: savedAddresses.length === 0,
+    };
+
+    const invalid = validateAddressInput(payload);
+    if (invalid) {
+      setSaveError(invalid);
+      return;
+    }
+
+    const result = await dispatch(createAddress(payload));
+    if (!createAddress.fulfilled.match(result)) {
+      setSaveError(typeof result.payload === "string" ? result.payload : "บันทึกที่อยู่ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+      return;
+    }
+
+    setSelectedAddress(result.payload.id);
+    setUseNewAddress(false);
+    resetAddressForm();
+  }
+
   async function checkout() {
     if (!user) {
       dispatch(setAuthMode("register"));
@@ -107,41 +168,9 @@ export default function CartPage() {
       return;
     }
 
-    // บันทึกที่อยู่ใหม่เข้าสมุดที่อยู่ก่อนไปหน้าชำระเงิน ถ้าผู้ใช้ติ๊กไว้
-    if (showAddressForm && saveNewAddress) {
-      const latitude = normalizeAddressCoordinate(coords.lat);
-      const longitude = normalizeAddressCoordinate(coords.lng);
-      if (latitude == null || longitude == null) {
-        setSaveError("พิกัดที่อยู่ไม่ถูกต้อง กรุณาเลือกตำแหน่งบนแผนที่อีกครั้ง");
-        return;
-      }
-
-      const payload: CreateAddressInput = {
-        label: addressLabel.trim() || "ที่อยู่จัดส่ง",
-        recipientName: recipientName.trim(),
-        recipientPhone: recipientPhone.trim(),
-        addressLine: addressText.trim(),
-        subDistrict: subDistrict.trim(),
-        district: district.trim(),
-        province: province.trim(),
-        postalCode: postcode.trim(),
-        latitude,
-        longitude,
-        isDefault: savedAddresses.length === 0,
-      };
-
-      const invalid = validateAddressInput(payload);
-      if (invalid) {
-        setSaveError(invalid);
-        return;
-      }
-
-      const result = await dispatch(createAddress(payload));
-      if (result.meta.requestStatus !== "fulfilled") {
-        setSaveError("บันทึกที่อยู่ไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
-        return;
-      }
-      setSaveError(null);
+    if (showAddressForm) {
+      setSaveError("กรุณาบันทึกที่อยู่จัดส่งก่อนดำเนินการต่อ");
+      return;
     }
 
     router.push("/pay");
@@ -203,7 +232,7 @@ export default function CartPage() {
                   <button
                     type="button"
                     className={`address-option address-option--new ${useNewAddress ? "address-option--active" : ""}`}
-                    onClick={() => setUseNewAddress(true)}
+                    onClick={() => { resetAddressForm(); setUseNewAddress(true); }}
                   >
                     <span className="address-option__dot" />
                     <span className="address-option__body">
@@ -215,7 +244,8 @@ export default function CartPage() {
               )}
 
               {showAddressForm && (
-                <div className="address-form address-form--inline">
+                <div className="address-form">
+                  <h2>เพิ่มที่อยู่ใหม่</h2>
                   <AddressSearch onSelect={handleAddressSearchSelect} />
                   <div className="form-grid">
                     <label>
@@ -271,19 +301,31 @@ export default function CartPage() {
                     </button>
                   </div>
                   {locateError && <p className="address-map__error">{locateError}</p>}
-                  <label className="checkbox-row">
-                    <input type="checkbox" checked={saveNewAddress} onChange={(event) => setSaveNewAddress(event.target.checked)} />
-                    <span>บันทึกที่อยู่นี้ไว้ใช้ครั้งหน้า</span>
-                  </label>
-                  {saveNewAddress && (
-                    <div className="form-grid address-save-label">
-                      <label>
-                        ชื่อเรียกที่อยู่
-                        <input value={addressLabel} onChange={(event) => setAddressLabel(event.target.value)} placeholder="บ้าน / ออฟฟิศ" />
-                      </label>
-                    </div>
-                  )}
+                  <div className="form-grid address-form__details">
+                    <label>
+                      ชื่อเรียกที่อยู่
+                      <input value={addressLabel} onChange={(event) => setAddressLabel(event.target.value)} placeholder="บ้าน / ออฟฟิศ" />
+                    </label>
+                    <label>
+                      หมายเหตุการจัดส่ง
+                      <input value={addressNote} onChange={(event) => setAddressNote(event.target.value)} placeholder="ฝากไว้กับนิติบุคคลได้" />
+                    </label>
+                  </div>
                   {saveError && <p className="address-map__error">{saveError}</p>}
+                  <div className="button-row">
+                    <button className="button button--dark" onClick={saveShippingAddress} disabled={savingAddress}>
+                      {savingAddress ? "กำลังบันทึก…" : "บันทึกที่อยู่"}
+                    </button>
+                    {savedAddresses.length > 0 && (
+                      <button
+                        className="button button--outline"
+                        onClick={() => { resetAddressForm(); setUseNewAddress(false); }}
+                        disabled={savingAddress}
+                      >
+                        ยกเลิก
+                      </button>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
