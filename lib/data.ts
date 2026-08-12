@@ -51,42 +51,6 @@ export type Message = {
   products?: ChatProduct[];
 };
 
-export type Address = {
-  name: string;
-  tag?: string;
-  tagVariant?: "primary" | "muted";
-  primary?: boolean;
-  lines: string[];
-  coords: string;
-  note: string;
-};
-
-export const ADDRESSES: Address[] = [
-  {
-    name: "บ้าน",
-    tag: "ที่อยู่หลัก",
-    tagVariant: "primary",
-    primary: true,
-    lines: ["ปิยะดา ส. · 081-234-5678", "128/45 ซ.สุขุมวิท 31 แขวงคลองตันเหนือ", "เขตวัฒนา กรุงเทพฯ 10110"],
-    coords: "13.7402° N, 100.5623° E",
-    note: "ส่งได้ทุกวัน · ฝากไว้กับนิติบุคคลได้",
-  },
-  {
-    name: "ออฟฟิศ",
-    lines: ["ปิยะดา ส. · 081-234-5678", "999 อาคารเอ ชั้น 12 ถ.พระราม 4", "แขวงสีลม เขตบางรัก กรุงเทพฯ 10500"],
-    coords: "13.7248° N, 100.5340° E",
-    note: "รับพัสดุได้ จ.–ศ. ๙:๐๐–๑๘:๐๐",
-  },
-  {
-    name: "ส่งให้คุณแม่",
-    tag: "ต่างจังหวัด",
-    tagVariant: "muted",
-    lines: ["สมทรง ส. · 089-876-5432", "44/2 ต.ในเมือง อ.เมือง", "นครราชสีมา 30000"],
-    coords: "14.9799° N, 102.0978° E",
-    note: "ใช้เวลาส่ง ๑–๒ วัน",
-  },
-];
-
 export const PRODUCTS: Product[] = [
   {
     sku: "fuji",

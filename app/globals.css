@@ -378,6 +378,9 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-card__foot { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; color: var(--faint); font-size: 13px; }
 .address-card__foot button { border: 0; border-bottom: 1px solid #c2cfc1; background: none; color: #5f6d65; cursor: pointer; font-size: 13px; white-space: nowrap; }
 .address-card__foot button:hover { color: var(--ink); }
+.address-card__foot button:disabled { opacity: .5; cursor: wait; }
+.address-card__actions { display: flex; flex-shrink: 0; align-items: center; gap: 14px; }
+.address-save-label { margin-top: 16px; }
 .address-add-card { padding: 28px; min-height: 200px; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; border: 1px dashed #c2cfc1; background: none; cursor: pointer; }
 .address-add-card:hover { border-color: var(--ink); }
 .address-add-card > span { margin-bottom: 14px; color: #c2cfc1; font-size: 26px; line-height: 1; }
