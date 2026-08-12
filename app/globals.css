@@ -430,7 +430,22 @@ footer span { color: #9caaa1; }
 .pick:hover { border-color: var(--ink); }
 .pick-thumb { width: 56px; aspect-ratio: 1; overflow: hidden; }
 .pick-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-.message-typing { color: var(--faint); }
+.message-typing { display: flex; align-items: center; color: var(--faint); animation: typing-breathe 1.8s ease-in-out infinite; }
+.message-typing__dots { margin-left: 7px; display: inline-flex; align-items: center; gap: 4px; }
+.message-typing__dots i { width: 4px; height: 4px; border-radius: 50%; background: currentColor; animation: typing-dot 1.15s ease-in-out infinite; }
+.message-typing__dots i:nth-child(2) { animation-delay: .16s; }
+.message-typing__dots i:nth-child(3) { animation-delay: .32s; }
+@keyframes typing-dot {
+  0%, 60%, 100% { opacity: .35; transform: translateY(0); }
+  30% { opacity: 1; transform: translateY(-3px); }
+}
+@keyframes typing-breathe {
+  0%, 100% { border-color: var(--line); background: var(--wash); }
+  50% { border-color: #cbd9c9; background: #edf5eb; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .message-typing, .message-typing__dots i { animation: none; }
+}
 .pick-info { display: flex; flex-direction: column; }
 .pick-info strong { font: 500 16px "Anuphan", sans-serif; }
 .pick-info small { margin-top: 5px; color: var(--faint); font-size: 12px; line-height: 1.6; }

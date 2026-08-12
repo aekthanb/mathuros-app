@@ -61,7 +61,14 @@ export default function AssistantChat() {
           ))}
           {sending && (
             <div className="message message--assistant">
-              <p className="message-typing">กำลังคัดผลไม้ให้อยู่…</p>
+              <p className="message-typing" role="status" aria-live="polite">
+                <span>กำลังคัดผลไม้ให้อยู่</span>
+                <span className="message-typing__dots" aria-hidden="true">
+                  <i />
+                  <i />
+                  <i />
+                </span>
+              </p>
             </div>
           )}
         </div>
