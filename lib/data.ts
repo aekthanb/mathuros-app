@@ -14,10 +14,41 @@ export type Product = {
   image?: string;
 };
 
+export type ChatProductSize = {
+  label: string;
+  price: string;
+};
+
+export type ChatProduct = {
+  id: string;
+  sku: string;
+  name: string;
+  price: string;
+  oldPrice?: string | null;
+  imageUrl?: string | null;
+  unit?: string | null;
+  origin?: string | null;
+  brix?: string | null;
+  shelfLife?: string | null;
+  weight?: string | null;
+  badge?: string | null;
+  description?: string | null;
+  stockStatus?: string | null;
+  availableQty?: number | null;
+  nextCutDate?: string | null;
+  sizes?: ChatProductSize[] | null;
+};
+
+export type ChatResponse = {
+  sessionId: string;
+  reply: string;
+  products?: ChatProduct[];
+};
+
 export type Message = {
   role: "assistant" | "user";
   text: string;
-  picks?: { sku: string; reason: string }[];
+  products?: ChatProduct[];
 };
 
 export type Address = {
@@ -216,6 +247,11 @@ export const ORDER_HISTORY = [
 ];
 
 export const baht = (value: number) => `฿${value.toLocaleString("en-US")}`;
+
+export const bahtAmount = (value: string | number) => {
+  const amount = typeof value === "number" ? value : Number.parseFloat(value);
+  return Number.isFinite(amount) ? baht(amount) : String(value);
+};
 
 export function priceFor(sku: string, sizeIndex: number) {
   const product = PRODUCTS.find((item) => item.sku === sku) ?? PRODUCTS[0];
