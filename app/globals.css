@@ -414,27 +414,29 @@ footer span { color: #9caaa1; }
 .back-to-top--visible { opacity: 1; visibility: visible; transform: translateY(0); }
 .back-to-top:hover { border-color: var(--ink); background: var(--wash); }
 
-.assistant { position: fixed; z-index: 60; right: 22px; bottom: 22px; width: 166px; height: 45px; border-radius: 999px; background: var(--ink); box-shadow: 0 8px 24px rgba(23,32,26,.22); overflow: hidden; transition: width .3s ease, height .3s ease, border-radius .3s ease, background .3s ease, box-shadow .3s ease; }
-.assistant--open { width: 288px; height: min(512px, calc(100vh - 45px)); border-radius: 16px; background: white; box-shadow: 0 19px 48px rgba(23,32,26,.28); }
+/* กล่องแชทยกเว้นการย่อ 80% เหมือน .auth-modal — ข้อความข้างในขนาดเดิม
+   ถ้าย่อตามสัดส่วน ปุ่มลัดสองคอลัมน์จะแคบจนข้อความโดน ellipsis ตัด */
+.assistant { position: fixed; z-index: 60; right: 24px; bottom: 24px; width: 190px; height: 52px; border-radius: 999px; background: var(--ink); box-shadow: 0 8px 24px rgba(23,32,26,.22); overflow: hidden; transition: width .3s ease, height .3s ease, border-radius .3s ease, background .3s ease, box-shadow .3s ease; }
+.assistant--open { width: 344px; height: min(600px, calc(100vh - 52px)); border-radius: 18px; background: white; box-shadow: 0 19px 48px rgba(23,32,26,.28); }
 .assistant-trigger { position: absolute; inset: 0; padding: 0 18px 0 14px; display: flex; align-items: center; justify-content: center; gap: 10px; border: 0; background: none; color: white; cursor: pointer; white-space: nowrap; font-size: 14px; opacity: 1; transition: opacity .2s ease; }
 .assistant--open .assistant-trigger { opacity: 0; pointer-events: none; }
 .assistant-trigger .assistant-head__dot { background: var(--orange); }
 .assistant-panel { position: absolute; inset: 0; display: flex; flex-direction: column; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
 .assistant--open .assistant-panel { opacity: 1; pointer-events: auto; transition-delay: .1s; }
-.assistant-head { width: 100%; padding: 18px 19px; display: flex; align-items: center; gap: 10px; border: 0; border-bottom: 1px solid var(--line); background: white; flex-shrink: 0; }
+.assistant-head { width: 100%; padding: 20px 22px; display: flex; align-items: center; gap: 10px; border: 0; border-bottom: 1px solid var(--line); background: white; flex-shrink: 0; }
 .assistant-head__dot { width: 6px; height: 6px; flex-shrink: 0; border-radius: 50%; background: var(--green); }
 .assistant-head__title { flex: 1; text-align: left; }
 .assistant-head__title strong { display: block; font-size: 15px; font-weight: 400; }
 .assistant-head__title small { display: block; margin-top: 3px; color: var(--faint); font: 10px "IBM Plex Mono", monospace; letter-spacing: .2em; }
 .assistant-close { border: 0; padding: 3px 5px; color: var(--faint); background: none; cursor: pointer; font-size: 18px; line-height: 1; }
 .assistant-close:hover { color: var(--ink); }
-.messages { flex: 1; padding: 19px; display: flex; flex-direction: column; gap: 14px; overflow-y: auto; }
-.message p { margin: 0; padding: 10px 11px; border: 1px solid var(--line); border-radius: 3px; background: var(--wash); font-size: 13px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
+.messages { flex: 1; padding: 22px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+.message p { margin: 0; padding: 11px 14px; border: 1px solid var(--line); border-radius: 3px; background: var(--wash); font-size: 13px; line-height: 1.75; white-space: pre-wrap; overflow-wrap: anywhere; }
 .message--user { display: flex; justify-content: flex-end; }
 .message--user p { max-width: 82%; padding: 10px 16px; color: white; border: 0; border-radius: 999px; background: var(--ink); }
-.pick { width: 100%; margin-top: 8px; padding: 11px; display: grid; grid-template-columns: 45px 1fr auto; align-items: center; gap: 11px; border: 1px solid var(--line); background: white; cursor: pointer; text-align: left; }
+.pick { width: 100%; margin-top: 9px; padding: 13px; display: grid; grid-template-columns: 50px 1fr auto; align-items: center; gap: 13px; border: 1px solid var(--line); background: white; cursor: pointer; text-align: left; }
 .pick:hover { border-color: var(--ink); }
-.pick-thumb { width: 45px; aspect-ratio: 1; overflow: hidden; }
+.pick-thumb { width: 50px; aspect-ratio: 1; overflow: hidden; }
 .pick-thumb img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .message-typing { display: flex; align-items: center; color: var(--faint); animation: typing-breathe 1.8s ease-in-out infinite; }
 .message-typing__dots { margin-left: 6px; display: inline-flex; align-items: center; gap: 3px; }
@@ -456,17 +458,17 @@ footer span { color: #9caaa1; }
 .pick-info strong { font: 500 16px "Anuphan", sans-serif; }
 .pick-info small { margin-top: 4px; color: var(--faint); font-size: 12px; line-height: 1.6; }
 .pick b { font: 13px "IBM Plex Mono", monospace; white-space: nowrap; }
-.assistant-footer { flex-shrink: 0; padding: 13px 19px 18px; border-top: 1px solid var(--line); }
-.quick-prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; margin-bottom: 11px; }
-.quick-prompts button { padding: 7px 10px; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: white; cursor: pointer; font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: border-color .18s ease, color .18s ease, background .18s ease; }
+.assistant-footer { flex-shrink: 0; padding: 15px 22px 20px; border-top: 1px solid var(--line); }
+.quick-prompts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 13px; }
+.quick-prompts button { padding: 8px 12px; display: flex; align-items: center; justify-content: center; color: var(--muted); border: 1px solid var(--line); border-radius: 999px; background: white; cursor: pointer; font-size: 12px; line-height: 1.2; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: border-color .18s ease, color .18s ease, background .18s ease; }
 .quick-prompts button:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); background: var(--wash); }
 .quick-prompts button:disabled { opacity: .5; cursor: not-allowed; }
 .chat-error { margin-bottom: 11px; padding: 8px 10px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px; border: 1px solid #d8b4a0; background: #fdf4ee; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .chat-error button { padding: 0; border: 0; background: none; color: var(--ink); cursor: pointer; font-size: 12px; text-decoration: underline; }
-.chat-input { display: flex; gap: 8px; align-items: center; }
-.chat-input input { min-width: 0; flex: 1; padding: 10px 13px; border: 1px solid #c2cfc1; font-size: 14px; font-family: inherit; color: var(--ink); outline: none; }
+.chat-input { display: flex; gap: 9px; align-items: center; }
+.chat-input input { min-width: 0; flex: 1; padding: 11px 14px; border: 1px solid #c2cfc1; font-size: 14px; font-family: inherit; color: var(--ink); outline: none; }
 .chat-input input:focus { border-color: var(--ink); }
-.chat-input button { padding: 10px 18px; color: white; border: 0; background: var(--ink); cursor: pointer; font-size: 14px; white-space: nowrap; }
+.chat-input button { padding: 11px 20px; color: white; border: 0; background: var(--ink); cursor: pointer; font-size: 14px; white-space: nowrap; }
 .chat-input button:hover { background: var(--green); }
 .chat-input input:disabled, .chat-input button:disabled { opacity: .55; cursor: not-allowed; }
 
@@ -525,9 +527,9 @@ footer span { color: #9caaa1; }
 
 @media (max-width: 1180px) {
   .store-layout { display: block; }
-  .assistant { right: 14px; bottom: 14px; }
+  .assistant { right: 16px; bottom: 16px; }
   .back-to-top { left: 14px; bottom: 14px; width: 35px; height: 35px; }
-  .assistant--open { width: min(288px, calc(100vw - 29px)); height: min(520px, calc(100vh - 29px)); }
+  .assistant--open { width: min(344px, calc(100vw - 32px)); height: min(600px, calc(100vh - 32px)); }
   .header-inner { padding-inline: 19px; }
   .section { padding-inline: 22px; }
   .account-page { padding-inline: 22px; }
