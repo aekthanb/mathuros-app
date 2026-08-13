@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { googleLogout } from "@react-oauth/google";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { logoutRequest } from "../api/auth";
 import {
   clearAuthSession,
@@ -15,7 +15,6 @@ import { setMenuOpen, toggleMenu } from "../lib/store/slices/uiSlice";
 import { setAuthMode, setAuthOpen } from "../lib/store/slices/authModalSlice";
 
 export default function Header() {
-  const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
   const [loggingOut, setLoggingOut] = useState(false);
@@ -45,8 +44,6 @@ export default function Header() {
       if (user?.provider === "google") googleLogout();
       dispatch(logout());
       dispatch(setMenuOpen(false));
-      router.push("/");
-      router.refresh();
       setLoggingOut(false);
     }
   };
