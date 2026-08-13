@@ -22,6 +22,12 @@ export default function AssistantChat() {
   const error = useAppSelector((state) => state.assistant.error);
   const chatRef = useRef<HTMLDivElement>(null);
 
+  // ปุ่มลัดเป็นตัวช่วยเริ่มบทสนทนา พอคุยไปแล้วก็ไม่เกี่ยวกับบริบทที่คุยอยู่
+  // เลยซ่อนทิ้งเพื่อคืนพื้นที่ให้ข้อความ — เช็คจากว่าผู้ใช้เคยพิมพ์หรือยัง
+  // ไม่ใช่จำนวนข้อความ เพราะตอนเริ่มมีข้อความทักทายจากบอทอยู่แล้ว ๑ อัน
+  // กด "เริ่มบทสนทนาใหม่" แล้ว messages กลับเป็นค่าตั้งต้น ปุ่มจึงโผล่มาอีกครั้ง
+  const showQuickPrompts = !messages.some((message) => message.role === "user");
+
   useEffect(() => {
     chatRef.current?.scrollTo({ top: chatRef.current.scrollHeight, behavior: "smooth" });
   }, [messages, sending, chatOpen]);
@@ -79,11 +85,13 @@ export default function AssistantChat() {
               <button onClick={() => dispatch(resetChat())} tabIndex={chatOpen ? 0 : -1}>เริ่มบทสนทนาใหม่</button>
             </div>
           )}
-          <div className="quick-prompts">
-            {QUICK_PROMPTS.map(([key, text]) => (
-              <button key={key} onClick={() => dispatch(askAssistant(text))} disabled={sending} tabIndex={chatOpen ? 0 : -1}>{text}</button>
-            ))}
-          </div>
+          {showQuickPrompts && (
+            <div className="quick-prompts">
+              {QUICK_PROMPTS.map(([key, text]) => (
+                <button key={key} onClick={() => dispatch(askAssistant(text))} disabled={sending} tabIndex={chatOpen ? 0 : -1}>{text}</button>
+              ))}
+            </div>
+          )}
           <div className="chat-input">
             <input
               value={query}
