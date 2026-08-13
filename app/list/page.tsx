@@ -39,6 +39,8 @@ export default function ListPage() {
           onClick={() => {
             dispatch(
               addToCart({
+                productId: null,
+                sizeId: null,
                 sku: "special-box",
                 name: "กล่องคัดพิเศษของสัปดาห์นี้",
                 label: "กล่องคัดพิเศษ 800×1000",

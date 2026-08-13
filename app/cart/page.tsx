@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { PRODUCTS, baht } from "../../lib/data";
@@ -14,8 +14,10 @@ import {
 import CartLine from "../../components/CartLine";
 import AddressSearch, { type AddressSearchResult } from "../../components/AddressSearch";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
-import { removeFromCart, updateCartQty } from "../../lib/store/slices/cartSlice";
+import { removeFromCart, toOrderItems, updateCartQty } from "../../lib/store/slices/cartSlice";
 import { createAddress, fetchAddresses } from "../../lib/store/slices/addressSlice";
+import { placeOrder } from "../../lib/store/slices/orderSlice";
+import { newIdempotencyKey } from "../../api/orders";
 import { setAuthMode, setAuthOpen } from "../../lib/store/slices/authModalSlice";
 
 const AddressMap = dynamic(() => import("../../components/AddressMap"), {
@@ -62,6 +64,9 @@ export default function CartPage() {
   const [postcode, setPostcode] = useState("");
   const [addressNote, setAddressNote] = useState("");
   const [saveError, setSaveError] = useState<string | null>(null);
+
+  const placing = useAppSelector((state) => state.order.placing);
+  const idempotencyKey = useRef<string | null>(null);
 
   useEffect(() => {
     if (authHydrated && user) dispatch(fetchAddresses());
@@ -169,11 +174,44 @@ export default function CartPage() {
       return;
     }
 
-    if (showAddressForm) {
+    if (showAddressForm || !activeAddressId) {
       setSaveError("กรุณาบันทึกที่อยู่จัดส่งก่อนดำเนินการต่อ");
       return;
     }
 
+    // กล่องคัดพิเศษยังไม่มีในฐานข้อมูล เลยสั่งผ่าน API ไม่ได้ — บอกให้เอาออกดีกว่า
+    // ปล่อยให้หลุดไปเงียบ ๆ แล้วลูกค้าจ่ายเงินโดยไม่ได้ของ
+    const orderItems = toOrderItems(items);
+    const unorderable = items.filter((item) => !item.productId || !item.sizeId);
+    if (unorderable.length) {
+      setSaveError(
+        `${unorderable.map((item) => item.name).join(" · ")} ยังสั่งซื้อผ่านระบบไม่ได้ กรุณานำออกจากตะกร้าก่อน`,
+      );
+      return;
+    }
+    if (!orderItems.length) {
+      setSaveError("ไม่มีรายการที่สั่งซื้อได้ในตะกร้า");
+      return;
+    }
+
+    // คีย์เดิมตลอดการกดสั่งซื้อรอบนี้ ถ้าเน็ตหลุดแล้วกดใหม่ API จะคืนออเดอร์ใบเดิม
+    // แทนที่จะตัดสต็อกซ้ำ ล้างคีย์ก็ต่อเมื่อสั่งสำเร็จแล้วเท่านั้น
+    idempotencyKey.current ??= newIdempotencyKey();
+
+    const result = await dispatch(
+      placeOrder({
+        input: { addressId: activeAddressId, items: orderItems },
+        idempotencyKey: idempotencyKey.current,
+      }),
+    );
+
+    if (!placeOrder.fulfilled.match(result)) {
+      setSaveError(typeof result.payload === "string" ? result.payload : "สั่งซื้อไม่สำเร็จ กรุณาลองใหม่อีกครั้ง");
+      return;
+    }
+
+    idempotencyKey.current = null;
+    setSaveError(null);
     router.push("/pay");
   }
 
@@ -341,8 +379,19 @@ export default function CartPage() {
           <div><span>ค่าจัดส่งควบคุมอุณหภูมิ</span><strong>{baht(shipping)}</strong></div>
           <div className="discount"><span>ส่วนลดสมาชิก</span><strong>—</strong></div>
           <div className="summary-total"><span>ยอดรวม</span><strong>{baht(grandTotal)}</strong></div>
-          <button className="button button--dark" onClick={checkout} disabled={items.length === 0 || savingAddress}>
-            {savingAddress ? "กำลังบันทึกที่อยู่…" : user ? "ไปหน้าสแกน QR" : "สมัครสมาชิกเพื่อสั่งซื้อ"}
+          {saveError && !showAddressForm && <p className="address-map__error">{saveError}</p>}
+          <button
+            className="button button--dark"
+            onClick={checkout}
+            disabled={items.length === 0 || savingAddress || placing}
+          >
+            {placing
+              ? "กำลังสั่งซื้อ…"
+              : savingAddress
+                ? "กำลังบันทึกที่อยู่…"
+                : user
+                  ? "ยืนยันคำสั่งซื้อ"
+                  : "สมัครสมาชิกเพื่อสั่งซื้อ"}
           </button>
           <small>ชำระผ่าน PromptPay · ข้อมูลถูกเข้ารหัสอย่างปลอดภัย</small>
         </aside>

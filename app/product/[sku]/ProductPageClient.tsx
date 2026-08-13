@@ -82,14 +82,14 @@ export default function ProductPageClient({ sku }: { sku: string }) {
             <small>ราคาต่อชุด</small>
           </div>
           <div className="size-options">
-            {sizes.map(([label, value], index) => (
+            {sizes.map((option, index) => (
               <button
                 className={index === size ? "active" : ""}
-                key={label}
+                key={option.id}
                 onClick={() => dispatch(setSize(index))}
               >
-                <span>{label}</span>
-                <strong>{baht(value)}</strong>
+                <span>{option.label}</span>
+                <strong>{baht(option.price)}</strong>
               </button>
             ))}
           </div>
@@ -106,10 +106,12 @@ export default function ProductPageClient({ sku }: { sku: string }) {
               onClick={() =>
                 dispatch(
                   addToCart({
+                    productId: product.id,
                     sku: product.sku,
                     name: product.name,
                     label: product.label,
-                    sizeLabel: sizes[size][0],
+                    sizeId: sizes[size].id,
+                    sizeLabel: sizes[size].label,
                     unitPrice,
                     qty,
                   }),

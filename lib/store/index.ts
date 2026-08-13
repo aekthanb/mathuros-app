@@ -6,6 +6,7 @@ import uiReducer from "./slices/uiSlice";
 import authModalReducer from "./slices/authModalSlice";
 import assistantReducer from "./slices/assistantSlice";
 import addressReducer from "./slices/addressSlice";
+import orderReducer from "./slices/orderSlice";
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     authModal: authModalReducer,
     assistant: assistantReducer,
     address: addressReducer,
+    order: orderReducer,
   },
 });
 

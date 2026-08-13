@@ -359,7 +359,8 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .order-body { padding-top: 20px; display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 30px; }
 .order-body__info { display: flex; align-items: center; gap: 14px; }
 .order-thumbs { display: flex; gap: 8px; flex-shrink: 0; }
-.order-thumb { width: 52px; height: 52px; }
+.order-thumb { width: 52px; height: 52px; overflow: hidden; }
+.order-thumb img { object-fit: cover; }
 .order-body__info > span { display: flex; flex-direction: column; }
 .order-body__info small { margin-top: 5px; color: var(--faint); }
 .order-actions { display: flex; gap: 10px; }

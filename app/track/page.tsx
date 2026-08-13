@@ -69,7 +69,7 @@ export default function TrackPage() {
             <div className="summary-lines">
               <div className="summary-line">
                 <div className="summary-thumb" />
-                <div><strong>{product.name}</strong><small>{sizes[size][0]} × {qty}</small></div>
+                <div><strong>{product.name}</strong><small>{sizes[size].label} × {qty}</small></div>
                 <b>{baht(unitPrice * qty)}</b>
               </div>
               <div className="summary-line">

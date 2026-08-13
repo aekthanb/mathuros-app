@@ -1,4 +1,15 @@
+/**
+ * ข้อมูลสินค้าชุดนี้ก๊อปมาจากตาราง products / product_sizes ใน Postgres ตรง ๆ
+ * (สแนปช็อตวันที่ ๑๔ ส.ค. ๒๕๖๙) เพราะฝั่ง API ยังไม่มี product module ให้เรียก
+ * — `id` คือ UUIDv7 ตัวจริงในฐานข้อมูล ต้องใช้ส่งเข้า POST /orders
+ *
+ * เมื่อ API สินค้าพร้อมแล้ว ให้ทิ้งไฟล์ส่วนนี้แล้วดึงจาก endpoint แทน
+ * รูปยังชี้ไป /public เหมือนเดิม ไม่ได้ใช้ image_url (S3) จาก DB เพราะ next/image
+ * ยังไม่ได้ตั้ง remotePatterns ให้โฮสต์นั้น
+ */
 export type Product = {
+  /** products.id — UUIDv7 */
+  id: string;
   sku: string;
   name: string;
   price: number;
@@ -53,6 +64,7 @@ export type Message = {
 
 export const PRODUCTS: Product[] = [
   {
+    id: "019fe838-1486-7cac-83a2-b5a2fdcb1258",
     sku: "fuji",
     name: "แอปเปิ้ลฟูจิ อาโอโมริ",
     price: 890,
@@ -69,6 +81,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/apple.png",
   },
   {
+    id: "019fe838-148d-7949-ab7c-26d480e6eb28",
     sku: "som",
     name: "ส้มสายน้ำผึ้ง ฝาง",
     price: 420,
@@ -84,6 +97,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/orange.png",
   },
   {
+    id: "019fe838-1490-7579-ac7c-86e369a68c50",
     sku: "mango",
     name: "มะม่วงน้ำดอกไม้สีทอง",
     price: 650,
@@ -100,6 +114,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/mango.png",
   },
   {
+    id: "019fe838-1493-7be5-b679-c174c93df3b7",
     sku: "grape",
     name: "องุ่นไชน์มัสแคท",
     price: 1290,
@@ -115,6 +130,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/grape.png",
   },
   {
+    id: "019fe838-1496-761b-b12a-099493ea4619",
     sku: "kiwi",
     name: "กีวีสีทอง",
     price: 490,
@@ -130,6 +146,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/kiwi.png",
   },
   {
+    id: "019fe838-1499-70d4-a55d-da9661b1ce26",
     sku: "straw",
     name: "สตรอว์เบอร์รี พันธุ์ ๘๐",
     price: 540,
@@ -145,6 +162,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/storberry.png",
   },
   {
+    id: "019fe838-149c-7b40-b9b8-297cf0be0579",
     sku: "longan",
     name: "ลำไยอีดอ ลำพูน",
     price: 480,
@@ -160,6 +178,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/longan.png",
   },
   {
+    id: "019fe838-149e-7bdf-87ad-0d91a9aebd3d",
     sku: "pomelo",
     name: "ส้มโอทองดี นครปฐม",
     price: 590,
@@ -175,6 +194,7 @@ export const PRODUCTS: Product[] = [
     image: "/img/list/pomelo.png",
   },
   {
+    id: "019fe838-14a1-7935-a91b-5f9236095451",
     sku: "coconut",
     name: "มะพร้าวน้ำหอมราชบุรี",
     price: 360,
@@ -191,24 +211,61 @@ export const PRODUCTS: Product[] = [
   },
 ];
 
-export const SIZES: Record<string, [string, number][]> = {
-  fuji: [["๖ ลูก", 890], ["๑๒ ลูก", 1650], ["กล่องของขวัญ", 2190]],
-  som: [["ตะกร้า ๒ กก.", 420], ["ลัง ๕ กก.", 980], ["กล่องของขวัญ", 1290]],
-  mango: [["๕ ลูก", 650], ["๑๐ ลูก", 1190], ["กล่องของขวัญ", 1690]],
-  grape: [["๒ พวง", 1290], ["๔ พวง", 2390], ["กล่องของขวัญ", 2890]],
-  kiwi: [["๘ ลูก", 490], ["๑๖ ลูก", 890], ["กล่องของขวัญ", 1290]],
-  straw: [["๒ กล่อง", 540], ["๔ กล่อง", 1020], ["กล่องของขวัญ", 1390]],
-  longan: [["ช่อสด ๒ กก.", 480], ["ช่อสด ๕ กก.", 1090], ["กล่องของขวัญ", 1290]],
-  pomelo: [["๒ ลูก", 590], ["๔ ลูก", 1090], ["กล่องของขวัญ", 1490]],
-  coconut: [["๔ ลูก", 360], ["๘ ลูก", 680], ["กล่องของขวัญ", 990]],
+export type ProductSize = {
+  /** product_sizes.id — UUIDv7 */
+  id: string;
+  label: string;
+  price: number;
 };
 
-export const ORDER_HISTORY = [
-  ["MTR-26080412", "๔ ส.ค. ๒๕๖๙", "กำลังคัดเกรด", "แอปเปิ้ลฟูจิ อาโอโมริ · ส้มสายน้ำผึ้ง ฝาง", "฿1,430"],
-  ["MTR-26071803", "๑๘ ก.ค. ๒๕๖๙", "ส่งถึงแล้ว", "องุ่นไชน์มัสแคท", "฿1,290"],
-  ["MTR-26070209", "๒ ก.ค. ๒๕๖๙", "ส่งถึงแล้ว", "ทุเรียนหมอนทอง จันท์ · มะม่วงน้ำดอกไม้สีทอง", "฿2,470"],
-  ["MTR-26061511", "๑๕ มิ.ย. ๒๕๖๙", "ยกเลิกแล้ว", "สตรอว์เบอร์รี พันธุ์ ๘๐", "฿540"],
-];
+/** เรียงตาม product_sizes.sort_order เหมือนที่ picker บนหน้าสินค้าแสดง */
+export const SIZES: Record<string, ProductSize[]> = {
+  fuji: [
+    { id: "019fe83b-faa5-72c8-8f3f-638b2dfb75ba", label: "๖ ลูก", price: 890 },
+    { id: "019fe83b-faa8-73dd-b6cb-e72fdb886168", label: "๑๒ ลูก", price: 1650 },
+    { id: "019fe83b-faaa-7596-8aef-d055fcc4c178", label: "กล่องของขวัญ", price: 2190 },
+  ],
+  som: [
+    { id: "019fe83b-faae-77b4-82ef-2166d73ff447", label: "ตะกร้า ๒ กก.", price: 420 },
+    { id: "019fe83b-fab0-707c-a5b0-b6907ef9925a", label: "ลัง ๕ กก.", price: 980 },
+    { id: "019fe83b-fab2-7975-a07f-e7acffeaf100", label: "กล่องของขวัญ", price: 1290 },
+  ],
+  mango: [
+    { id: "019fe83b-fab7-74ef-a95d-93122ac6b959", label: "๕ ลูก", price: 650 },
+    { id: "019fe83b-fab9-7949-bdf4-edc5d8885c32", label: "๑๐ ลูก", price: 1190 },
+    { id: "019fe83b-faba-7006-b0a7-0eae2b1416c5", label: "กล่องของขวัญ", price: 1690 },
+  ],
+  grape: [
+    { id: "019fe83b-fabe-71a6-99ef-95715f0ee7bf", label: "๒ พวง", price: 1290 },
+    { id: "019fe83b-fac0-7808-83bd-8bc2f182b8be", label: "๔ พวง", price: 2390 },
+    { id: "019fe83b-fac1-798f-9b53-87dda2bb6e72", label: "กล่องของขวัญ", price: 2890 },
+  ],
+  kiwi: [
+    { id: "019fe83b-fac5-7313-bdf7-f1f1125f1d53", label: "๘ ลูก", price: 490 },
+    { id: "019fe83b-fac6-773d-b20f-3c5577f879aa", label: "๑๖ ลูก", price: 890 },
+    { id: "019fe83b-fac8-78fa-953f-fc1cb2d60292", label: "กล่องของขวัญ", price: 1290 },
+  ],
+  straw: [
+    { id: "019fe83b-facb-70d7-842d-00675ac4ed16", label: "๒ กล่อง", price: 540 },
+    { id: "019fe83b-facc-7f64-9892-354bf8070197", label: "๔ กล่อง", price: 1020 },
+    { id: "019fe83b-face-7b14-b6e1-4d2412d11886", label: "กล่องของขวัญ", price: 1390 },
+  ],
+  longan: [
+    { id: "019fe83b-fad2-7bdc-9359-b08cc8f96d0d", label: "ช่อสด ๒ กก.", price: 480 },
+    { id: "019fe83b-fad3-7581-bdd4-37b7d2687635", label: "ช่อสด ๕ กก.", price: 1090 },
+    { id: "019fe83b-fad4-73c7-9886-97979e758acf", label: "กล่องของขวัญ", price: 1290 },
+  ],
+  pomelo: [
+    { id: "019fe83b-fad8-7999-a0bb-148f232c385e", label: "๒ ลูก", price: 590 },
+    { id: "019fe83b-fad9-79f7-a1ea-5fe6e668ed72", label: "๔ ลูก", price: 1090 },
+    { id: "019fe83b-fadb-7c7c-be89-f712f0a2b3c5", label: "กล่องของขวัญ", price: 1490 },
+  ],
+  coconut: [
+    { id: "019fe83b-fade-7c8d-bbfc-da6699ae0c1b", label: "๔ ลูก", price: 360 },
+    { id: "019fe83b-fadf-70bb-8614-49d370efe620", label: "๘ ลูก", price: 680 },
+    { id: "019fe83b-fae1-7dd7-ac4d-3d74c4739209", label: "กล่องของขวัญ", price: 990 },
+  ],
+};
 
 export const baht = (value: number) => `฿${value.toLocaleString("en-US")}`;
 
@@ -220,6 +277,7 @@ export const bahtAmount = (value: string | number) => {
 export function priceFor(sku: string, sizeIndex: number) {
   const product = PRODUCTS.find((item) => item.sku === sku) ?? PRODUCTS[0];
   const sizes = SIZES[product.sku];
-  const unitPrice = sizes[sizeIndex]?.[1] ?? product.price;
-  return { product, sizes, unitPrice };
+  const size = sizes[sizeIndex];
+  const unitPrice = size?.price ?? product.price;
+  return { product, sizes, size, unitPrice };
 }

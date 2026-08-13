@@ -1,14 +1,45 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
-import { baht, priceFor } from "../../lib/data";
-import { useAppSelector } from "../../lib/store/hooks";
+import { bahtAmount } from "../../lib/data";
+import {
+  formatOrderDateTime,
+  orderReference,
+  ORDER_STATUS_LABELS,
+} from "../../lib/order";
+import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
+import { fetchOrders } from "../../lib/store/slices/orderSlice";
 
 export default function PayPage() {
-  const { sku, size, qty } = useAppSelector((state) => state.product);
-  const { unitPrice } = priceFor(sku, size);
-  const subtotal = unitPrice * qty + 420;
-  const grandTotal = subtotal + 120;
+  const dispatch = useAppDispatch();
+  const { items, lastPlacedId, loaded, loading } = useAppSelector((state) => state.order);
+  const user = useAppSelector((state) => state.auth.user);
+  const authHydrated = useAppSelector((state) => state.auth.hydrated);
+
+  // รีเฟรชหน้านี้แล้ว store จะว่าง — ดึงรายการมาใหม่เพื่อหาใบที่เพิ่งสั่ง
+  useEffect(() => {
+    if (authHydrated && user && !loaded) dispatch(fetchOrders());
+  }, [authHydrated, dispatch, loaded, user]);
+
+  const order = items.find((item) => item.id === lastPlacedId) ?? items.find((item) => item.status === "PENDING");
+
+  if (!order) {
+    return (
+      <main className="account-page page-section">
+        <div className="page-heading">
+          <div>
+            <p className="eyebrow">พร้อมเพย์ / THAI QR PAYMENT</p>
+            <h1>ไม่พบคำสั่งซื้อที่รอชำระ</h1>
+            <div className="heading-meta">
+              {loading ? "กำลังตรวจสอบคำสั่งซื้อ…" : "คำสั่งซื้ออาจถูกยกเลิกหรือหมดเวลาชำระไปแล้ว"}
+            </div>
+          </div>
+          <Link className="text-link" href="/cart">กลับไปที่ตะกร้า</Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="account-page page-section">
@@ -22,12 +53,13 @@ export default function PayPage() {
         <div>
           <p className="eyebrow">พร้อมเพย์ / THAI QR PAYMENT</p>
           <h1>สแกนเพื่อชำระเงิน</h1>
-          <p>เปิดแอปธนาคารของคุณ เลือกสแกน QR แล้วตรวจสอบยอดให้ตรงกับ {baht(grandTotal)} ก่อนกดยืนยัน ระบบจะตัดผลไม้ให้หลังได้รับเงินทันที</p>
+          <p>เปิดแอปธนาคารของคุณ เลือกสแกน QR แล้วตรวจสอบยอดให้ตรงกับ {bahtAmount(order.total)} ก่อนกดยืนยัน ระบบจะตัดผลไม้ให้หลังได้รับเงินทันที</p>
 
           <div className="pay-details">
             <div><span>ผู้รับเงิน</span><span>บจก. มธุรส ฟรุ๊ต</span></div>
-            <div><span>เลขอ้างอิง</span><span>MTR-26080412</span></div>
-            <div className="pay-details__total"><span>ยอดที่ต้องชำระ</span><span>{baht(grandTotal)}</span></div>
+            <div><span>เลขอ้างอิง</span><span>{orderReference(order)}</span></div>
+            <div><span>สถานะ</span><span>{ORDER_STATUS_LABELS[order.status]}</span></div>
+            <div className="pay-details__total"><span>ยอดที่ต้องชำระ</span><span>{bahtAmount(order.total)}</span></div>
           </div>
 
           <div className="pay-steps">
@@ -47,8 +79,8 @@ export default function PayPage() {
             <div className="qr-frame">
               <div className="qr-frame__inner"><span>QR CODE<br />(สร้างจริงตอนต่อระบบชำระเงิน)</span></div>
             </div>
-            <div className="qr-card__amount">{baht(grandTotal)}</div>
-            <div className="qr-card__expiry">QR หมดอายุใน <b>14:52</b> นาที</div>
+            <div className="qr-card__amount">{bahtAmount(order.total)}</div>
+            <div className="qr-card__expiry">ชำระภายใน <b>{formatOrderDateTime(order.expiresAt)}</b> ไม่งั้นระบบจะคืนผลไม้เข้าสต็อก</div>
             <div className="qr-card__actions">
               <Link className="button button--dark" href="/done">ฉันชำระเงินแล้ว</Link>
               <button className="button button--outline">บันทึกภาพ QR</button>
