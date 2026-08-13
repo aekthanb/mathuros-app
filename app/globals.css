@@ -227,7 +227,7 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .address-search__item:hover { background: var(--wash); }
 .address-search__status { padding: 12px 14px; color: var(--faint); font-size: 13px; }
 .address-search__status--error { color: var(--orange); }
-.address-map.address-map--picker { display: block; height: 340px; margin-top: 4px; background-image: none; overflow: hidden; }
+.address-map.address-map--picker { position: relative; z-index: 0; isolation: isolate; display: block; height: 340px; margin-top: 4px; background-image: none; overflow: hidden; }
 .address-map--picker > span { z-index: 1200; max-width: calc(100% - 20px); white-space: normal; }
 .address-map__loading { display: flex; align-items: center; justify-content: center; height: 340px; margin-top: 4px; border: 1px solid var(--line); background-image: repeating-linear-gradient(135deg, #e8f1e6 0 12px, #f2f7f1 12px 24px); color: var(--faint); font-size: 13px; }
 .address-map__locate { position: absolute; top: 10px; right: 10px; z-index: 1200; padding: 9px 16px; border: 1px solid #c2cfc1; background: white; font-size: 13px; cursor: pointer; }
@@ -468,7 +468,7 @@ footer span { color: #9caaa1; }
 .chat-input button:hover { background: var(--green); }
 .chat-input input:disabled, .chat-input button:disabled { opacity: .55; cursor: not-allowed; }
 
-.modal-backdrop { position: fixed; z-index: 200; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 40px; overflow-y: auto; background: rgba(18,27,21,.54); backdrop-filter: blur(7px); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s; }
+.modal-backdrop { position: fixed; z-index: 2000; inset: 0; display: flex; align-items: flex-start; justify-content: center; padding: 40px; overflow-y: auto; background: rgba(18,27,21,.54); backdrop-filter: blur(7px); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility .25s; }
 .modal-backdrop--open { opacity: 1; visibility: visible; }
 .auth-modal { width: 880px; max-width: 100%; min-height: 470px; margin: auto; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; background: white; border: 1px solid rgba(227,234,225,.9); border-radius: 14px; box-shadow: 0 28px 80px rgba(13,25,17,.22), 0 4px 16px rgba(13,25,17,.08); transform: translateY(16px) scale(.98); transition: transform .3s cubic-bezier(.22,1,.36,1); }
 .modal-backdrop--open .auth-modal { transform: translateY(0) scale(1); }
