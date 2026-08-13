@@ -64,6 +64,8 @@ function toForm(address: SavedAddress): FormState {
 export default function AddressesPage() {
   const dispatch = useAppDispatch();
   const { items, loading, loaded, saving, pendingId, unauthorized, error } = useAppSelector((state) => state.address);
+  const user = useAppSelector((state) => state.auth.user);
+  const authHydrated = useAppSelector((state) => state.auth.hydrated);
 
   const [editingId, setEditingId] = useState<string | null>(null);
   const [form, setForm] = useState<FormState | null>(null);
@@ -73,8 +75,8 @@ export default function AddressesPage() {
   const [locateError, setLocateError] = useState<string | null>(null);
 
   useEffect(() => {
-    dispatch(fetchAddresses());
-  }, [dispatch]);
+    if (authHydrated && user) dispatch(fetchAddresses());
+  }, [authHydrated, dispatch, user]);
 
   const setField = (field: keyof FormState) => (event: React.ChangeEvent<HTMLInputElement>) =>
     setForm((current) => (current ? { ...current, [field]: event.target.value } : current));
@@ -184,7 +186,7 @@ export default function AddressesPage() {
     if (result.meta.requestStatus === "fulfilled" && editingId === address.id) closeForm();
   }
 
-  if (unauthorized) {
+  if (unauthorized || (authHydrated && !user)) {
     return (
       <main className="account-page page-section">
         <div className="page-heading">

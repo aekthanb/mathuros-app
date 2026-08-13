@@ -13,6 +13,7 @@ import {
   updateAddressRequest,
 } from "../../../api/addresses";
 import { ApiError } from "../../../api/client";
+import { logout } from "./authSlice";
 
 type AddressState = {
   items: SavedAddress[];
@@ -23,6 +24,7 @@ type AddressState = {
   pendingId: string | null;
   unauthorized: boolean;
   error: string | null;
+  fetchRequestId: string | null;
 };
 
 const initialState: AddressState = {
@@ -33,6 +35,7 @@ const initialState: AddressState = {
   pendingId: null,
   unauthorized: false,
   error: null,
+  fetchRequestId: null,
 };
 
 function toMessage(error: unknown, fallback: string) {
@@ -128,6 +131,7 @@ function startSaving(state: AddressState) {
 }
 
 function finishSaving(state: AddressState, action: { payload: SavedAddress }) {
+  if (!state.saving) return;
   applySaved(state, action.payload);
   state.saving = false;
 }
@@ -157,20 +161,27 @@ const addressSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchAddresses.pending, (state) => {
+      .addCase(logout, () => ({ ...initialState }))
+      .addCase(fetchAddresses.pending, (state, action) => {
         state.loading = true;
         state.error = null;
+        state.fetchRequestId = action.meta.requestId;
       })
       .addCase(fetchAddresses.fulfilled, (state, action) => {
+        if (state.fetchRequestId !== action.meta.requestId) return;
         state.items = sortAddresses(action.payload);
         state.loading = false;
         state.loaded = true;
         state.unauthorized = false;
+        state.fetchRequestId = null;
       })
       .addCase(fetchAddresses.rejected, (state, action) => {
+        if (state.fetchRequestId !== action.meta.requestId) return;
         state.loading = false;
         state.loaded = true;
         state.unauthorized = action.payload?.unauthorized ?? false;
+        state.fetchRequestId = null;
+        if (state.unauthorized) state.items = [];
         state.error = action.payload?.unauthorized ? null : action.payload?.message ?? "โหลดที่อยู่ไม่สำเร็จ";
       })
       .addCase(createAddress.pending, startSaving)
@@ -181,12 +192,14 @@ const addressSlice = createSlice({
       .addCase(updateAddress.rejected, failSaving)
       .addCase(makeAddressDefault.pending, startPending)
       .addCase(makeAddressDefault.fulfilled, (state, action) => {
+        if (state.pendingId !== action.meta.arg) return;
         applySaved(state, action.payload);
         state.pendingId = null;
       })
       .addCase(makeAddressDefault.rejected, failPending)
       .addCase(deleteAddress.pending, startPending)
       .addCase(deleteAddress.fulfilled, (state, action) => {
+        if (state.pendingId !== action.meta.arg) return;
         state.items = sortAddresses(action.payload);
         state.pendingId = null;
       })

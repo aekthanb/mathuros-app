@@ -35,6 +35,7 @@ export default function CartPage() {
   const dispatch = useAppDispatch();
   const items = useAppSelector((state) => state.cart.items);
   const user = useAppSelector((state) => state.auth.user);
+  const authHydrated = useAppSelector((state) => state.auth.hydrated);
   const cartCount = items.reduce((sum, item) => sum + item.qty, 0);
   const subtotal = items.reduce((sum, item) => sum + item.unitPrice * item.qty, 0);
   const shipping = items.length ? SHIPPING : 0;
@@ -63,8 +64,8 @@ export default function CartPage() {
   const [saveError, setSaveError] = useState<string | null>(null);
 
   useEffect(() => {
-    dispatch(fetchAddresses());
-  }, [dispatch]);
+    if (authHydrated && user) dispatch(fetchAddresses());
+  }, [authHydrated, dispatch, user]);
 
   // ยังไม่ได้เลือกเอง ให้ตกไปที่ตัวแรกของรายการ ซึ่ง GET /addresses การันตีว่าเป็นที่อยู่หลัก
   const activeAddressId = savedAddresses.some((address) => address.id === selectedAddress)
