@@ -47,6 +47,9 @@ const cartSlice = createSlice({
       const item = state.items.find((item) => item.id === action.payload.id);
       if (item) item.qty = Math.max(1, action.payload.qty);
     },
+    clearCart(state) {
+      state.items = [];
+    },
   },
 });
 
@@ -70,5 +73,5 @@ export function toOrderItems(items: CartItem[]): CreateOrderItemInput[] {
   return [...merged.values()];
 }
 
-export const { addToCart, removeFromCart, updateCartQty } = cartSlice.actions;
+export const { addToCart, clearCart, removeFromCart, updateCartQty } = cartSlice.actions;
 export default cartSlice.reducer;

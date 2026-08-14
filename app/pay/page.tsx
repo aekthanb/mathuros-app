@@ -3,13 +3,10 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { bahtAmount } from "../../lib/data";
-import {
-  formatOrderDateTime,
-  orderReference,
-  ORDER_STATUS_LABELS,
-} from "../../lib/order";
+import { formatOrderDateTime, orderReference } from "../../lib/order";
 import { useAppDispatch, useAppSelector } from "../../lib/store/hooks";
 import { fetchOrders } from "../../lib/store/slices/orderSlice";
+import { clearCart } from "../../lib/store/slices/cartSlice";
 
 export default function PayPage() {
   const dispatch = useAppDispatch();
@@ -58,7 +55,8 @@ export default function PayPage() {
           <div className="pay-details">
             <div><span>ผู้รับเงิน</span><span>บจก. มธุรส ฟรุ๊ต</span></div>
             <div><span>เลขอ้างอิง</span><span>{orderReference(order)}</span></div>
-            <div><span>สถานะ</span><span>{ORDER_STATUS_LABELS[order.status]}</span></div>
+            <div><span>ค่าสินค้า</span><span>{bahtAmount(order.itemsTotal)}</span></div>
+            <div><span>ค่าจัดส่งควบคุมอุณหภูมิ</span><span>{bahtAmount(order.shippingFee)}</span></div>
             <div className="pay-details__total"><span>ยอดที่ต้องชำระ</span><span>{bahtAmount(order.total)}</span></div>
           </div>
 
@@ -82,7 +80,10 @@ export default function PayPage() {
             <div className="qr-card__amount">{bahtAmount(order.total)}</div>
             <div className="qr-card__expiry">ชำระภายใน <b>{formatOrderDateTime(order.expiresAt)}</b> ไม่งั้นระบบจะคืนผลไม้เข้าสต็อก</div>
             <div className="qr-card__actions">
-              <Link className="button button--dark" href="/done">ฉันชำระเงินแล้ว</Link>
+              {/* ของในตะกร้ากลายเป็นออเดอร์จริงไปแล้ว ปล่อยค้างไว้ลูกค้าจะเผลอสั่งซ้ำ */}
+              <Link className="button button--dark" href="/done" onClick={() => dispatch(clearCart())}>
+                ฉันชำระเงินแล้ว
+              </Link>
               <button className="button button--outline">บันทึกภาพ QR</button>
             </div>
             <p className="qr-card__note">ชำระผ่านทุกธนาคารในไทย ไม่มีค่าธรรมเนียม · ใบเสร็จส่งเข้าอีเมลอัตโนมัติ</p>

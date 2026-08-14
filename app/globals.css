@@ -331,7 +331,10 @@ h1, h2, h3 { font-family: "Anuphan", sans-serif; }
 .order-summary-card h2 { margin: 0 0 16px; font: 500 19px "Anuphan", sans-serif; }
 .summary-lines { display: grid; gap: 13px; }
 .summary-line { display: grid; grid-template-columns: 43px 1fr auto; gap: 11px; align-items: center; }
-.summary-thumb { width: 43px; aspect-ratio: 1; }
+/* แถวค่าจัดส่งไม่มีรูปสินค้า จึงเหลือสองคอลัมน์แทนที่จะปล่อยให้ช่องรูปว่างค้าง */
+.summary-line--fee { grid-template-columns: 1fr auto; margin-top: 13px; padding-top: 13px; border-top: 1px dashed var(--line); color: var(--muted); font-size: 13px; }
+.summary-thumb { position: relative; width: 43px; aspect-ratio: 1; overflow: hidden; }
+.summary-thumb img { object-fit: cover; }
 .summary-line strong { display: block; font-weight: 400; font-size: 15px; }
 .summary-line small { display: block; margin-top: 4px; color: var(--faint); font-size: 12px; }
 .summary-line > b { font: 13px "IBM Plex Mono", monospace; font-weight: 400; }

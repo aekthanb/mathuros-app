@@ -1,8 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { CreateOrderInput, Order, OrderPage } from "../../order";
+import type { CreateOrderInput, Order, OrderPage, OrderTracking } from "../../order";
 import {
   cancelOrderRequest,
   createOrderRequest,
+  getOrderTrackingRequest,
   listOrdersRequest,
   newIdempotencyKey,
 } from "../../../api/orders";
@@ -20,6 +21,10 @@ type OrderState = {
   lastPlacedId: string | null;
   /** id ของออเดอร์ที่กำลังยกเลิก */
   pendingId: string | null;
+  /** ข้อมูลหน้าติดตามพัสดุของออเดอร์ล่าสุดที่เปิดดู */
+  tracking: OrderTracking | null;
+  trackingLoading: boolean;
+  trackingError: string | null;
   unauthorized: boolean;
   error: string | null;
   fetchRequestId: string | null;
@@ -34,6 +39,9 @@ const initialState: OrderState = {
   placing: false,
   lastPlacedId: null,
   pendingId: null,
+  tracking: null,
+  trackingLoading: false,
+  trackingError: null,
   unauthorized: false,
   error: null,
   fetchRequestId: null,
@@ -112,6 +120,18 @@ export const placeOrder = createAsyncThunk<
       }
     }
     return rejectWithValue(toMessage(error, "สั่งซื้อไม่สำเร็จ"));
+  }
+});
+
+export const fetchOrderTracking = createAsyncThunk<
+  OrderTracking,
+  string,
+  { rejectValue: string }
+>("order/tracking", async (id, { rejectWithValue }) => {
+  try {
+    return await getOrderTrackingRequest(id);
+  } catch (error) {
+    return rejectWithValue(toMessage(error, "โหลดสถานะการจัดส่งไม่สำเร็จ"));
   }
 });
 
@@ -198,6 +218,24 @@ const orderSlice = createSlice({
       .addCase(placeOrder.rejected, (state, action) => {
         state.placing = false;
         state.error = action.payload ?? "สั่งซื้อไม่สำเร็จ";
+      })
+      .addCase(fetchOrderTracking.pending, (state, action) => {
+        state.trackingLoading = true;
+        state.trackingError = null;
+        // ล้างของออเดอร์ก่อนหน้าทิ้ง ไม่งั้นจะเห็นไทม์ไลน์ใบเก่าค้างระหว่างโหลดใบใหม่
+        if (state.tracking?.id !== action.meta.arg) state.tracking = null;
+      })
+      .addCase(fetchOrderTracking.fulfilled, (state, action) => {
+        state.tracking = action.payload;
+        state.trackingLoading = false;
+        // ข้อมูลใบนี้สดกว่าที่อยู่ในลิสต์ จึงเขียนทับให้หน้าประวัติตรงกัน แต่ไม่แทรก
+        // ใบใหม่เข้าลิสต์ — ลิสต์เรียงจากใหม่ไปเก่า การยัดใบเก่าไว้บนสุดจะผิดลำดับ
+        const index = state.items.findIndex((item) => item.id === action.payload.id);
+        if (index >= 0) state.items[index] = action.payload;
+      })
+      .addCase(fetchOrderTracking.rejected, (state, action) => {
+        state.trackingLoading = false;
+        state.trackingError = action.payload ?? "โหลดสถานะการจัดส่งไม่สำเร็จ";
       })
       .addCase(cancelOrder.pending, (state, action) => {
         state.pendingId = action.meta.arg;

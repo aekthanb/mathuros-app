@@ -68,7 +68,7 @@ function OrderActions({ order }: { order: Order }) {
   return (
     <div className="order-actions">
       {order.status === "PAID" && (
-        <Link className="button button--dark" href="/track">ติดตามสถานะ</Link>
+        <Link className="button button--dark" href={`/track?order=${order.id}`}>ติดตามสถานะ</Link>
       )}
       <Link className="button button--outline" href="/cart">สั่งซ้ำ</Link>
     </div>

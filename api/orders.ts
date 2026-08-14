@@ -4,6 +4,7 @@ import type {
   ListOrdersParams,
   Order,
   OrderPage,
+  OrderTracking,
 } from "../lib/order";
 
 /**
@@ -24,6 +25,12 @@ export const listOrdersRequest = async (params: ListOrdersParams = {}) => {
 
 export const getOrderRequest = async (id: string) => {
   const res = await api.get<Order>(`/orders/${id}`);
+  return res.data;
+};
+
+/** คืนทุกอย่างที่หน้าติดตามพัสดุต้องใช้ในครั้งเดียว — ออเดอร์ + ขั้นตอน + ไทม์ไลน์ */
+export const getOrderTrackingRequest = async (id: string) => {
+  const res = await api.get<OrderTracking>(`/orders/${id}/tracking`);
   return res.data;
 };
 

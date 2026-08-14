@@ -86,7 +86,7 @@ export default function Header() {
                     <small>{user.email ?? "แต้มคงเหลือ ๗๓"}</small>
                   </div>
                   <Link href="/orders">ประวัติการสั่งซื้อ</Link>
-                  <Link href="/track">ติดตามคำสั่งซื้อล่าสุด</Link>
+                  {/* <Link href="/track">ติดตามคำสั่งซื้อล่าสุด</Link> */}
                   <Link href="/addresses">ที่อยู่จัดส่งที่บันทึกไว้</Link>
                   <button
                     className="muted"

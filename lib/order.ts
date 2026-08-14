@@ -1,5 +1,8 @@
-/** ตรงกับ enum OrderStatus ของ Prisma ฝั่ง API */
+/** ตรงกับ enum OrderStatus ของ Prisma ฝั่ง API — บอกว่า "เงิน" อยู่ตรงไหน */
 export type OrderStatus = "PENDING" | "PAID" | "EXPIRED" | "REFUNDED" | "CANCELLED";
+
+/** ตรงกับ enum FulfillmentStage — บอกว่า "ผลไม้" อยู่ตรงไหน แยกอิสระจากสถานะเงิน */
+export type FulfillmentStage = "RECEIVED" | "HARVESTED" | "PACKING" | "SHIPPED" | "DELIVERED";
 
 export type OrderItem = {
   id: string;
@@ -18,6 +21,8 @@ export type OrderItem = {
 };
 
 export type OrderShipping = {
+  /** ชื่อเรียกที่อยู่ตอนสั่ง เช่น "บ้าน" — null สำหรับออเดอร์เก่าที่สั่งก่อนมีฟิลด์นี้ */
+  label: string | null;
   recipientName: string;
   recipientPhone: string;
   addressLine: string;
@@ -33,13 +38,46 @@ export type OrderShipping = {
 export type Order = {
   id: string;
   status: OrderStatus;
+  fulfillmentStage: FulfillmentStage;
+  /** เฉพาะค่าสินค้า ไม่รวมค่าส่ง */
+  itemsTotal: string;
+  shippingFee: string;
+  /** ยอดที่ต้องจ่ายจริง = itemsTotal + shippingFee */
   total: string;
+  /** ได้เลขพัสดุเมื่อส่งของให้ขนส่งแล้วเท่านั้น */
+  trackingNumber: string | null;
+  estimatedDeliveryAt: string | null;
   /** เวลาที่ order PENDING จะคืนสต็อก — ไม่มีความหมายเมื่อจ่ายเงินหรือยกเลิกแล้ว */
   expiresAt: string;
   createdAt: string;
   paidAt: string | null;
   shipping: OrderShipping;
   items: OrderItem[];
+};
+
+export type TrackingStepStatus = "complete" | "current" | "pending";
+
+export type OrderTrackingStep = {
+  stage: FulfillmentStage;
+  status: TrackingStepStatus;
+  /** null ระหว่างที่ยังไม่ถึงขั้นนี้ */
+  at: string | null;
+};
+
+/** บันทึกที่ทีมหลังบ้านเขียนเอง ไม่ได้ generate จากฟิลด์ของออเดอร์ */
+export type OrderEvent = {
+  id: string;
+  stage: FulfillmentStage | null;
+  title: string;
+  detail: string | null;
+  occurredAt: string;
+};
+
+export type OrderTracking = Order & {
+  /** เรียงจากเก่าไปใหม่ — DELIVERED ไม่ใช่ขั้นแยก แต่ทำให้ SHIPPED เป็น complete */
+  steps: OrderTrackingStep[];
+  /** เรียงจากใหม่ไปเก่า */
+  events: OrderEvent[];
 };
 
 export type OrderPage = {
@@ -76,6 +114,23 @@ export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   EXPIRED: "หมดเวลาชำระ",
   REFUNDED: "คืนเงินแล้ว",
   CANCELLED: "ยกเลิกแล้ว",
+};
+
+export const FULFILLMENT_STAGE_LABELS: Record<FulfillmentStage, string> = {
+  RECEIVED: "รับคำสั่งซื้อ",
+  HARVESTED: "ตัดจากสวน",
+  PACKING: "คัดเกรดและแพ็ก",
+  SHIPPED: "จัดส่งถึงบ้าน",
+  DELIVERED: "ส่งถึงแล้ว",
+};
+
+/** พาดหัวหน้าติดตามพัสดุ — บอกสิ่งที่กำลังเกิดขึ้นกับผลไม้ ไม่ใช่สถานะเงิน */
+export const FULFILLMENT_STAGE_HEADLINES: Record<FulfillmentStage, string> = {
+  RECEIVED: "รับคำสั่งซื้อแล้ว",
+  HARVESTED: "ตัดจากสวนแล้ว",
+  PACKING: "กำลังคัดผลไม้ให้คุณ",
+  SHIPPED: "กำลังจัดส่งถึงบ้าน",
+  DELIVERED: "ส่งถึงแล้ว",
 };
 
 /**
@@ -133,10 +188,13 @@ export function orderProgressNote(order: Order): string {
   switch (order.status) {
     case "PENDING":
       return `กรุณาชำระเงินภายใน ${formatOrderDateTime(order.expiresAt)}`;
-    case "PAID": {
-      const round = order.items[0]?.harvestRoundName;
-      return round ? `ชำระเงินแล้ว · จัดส่งรอบ ${round}` : "ชำระเงินแล้ว กำลังเตรียมจัดส่ง";
-    }
+    // จ่ายเงินแล้วลูกค้าสนใจว่าผลไม้ไปถึงไหน ไม่ใช่ว่าจ่ายไปแล้ว
+    case "PAID":
+      if (order.fulfillmentStage === "DELIVERED") return "ส่งถึงแล้ว";
+      if (order.estimatedDeliveryAt) {
+        return `${FULFILLMENT_STAGE_LABELS[order.fulfillmentStage]} · คาดว่าถึงบ้าน ${formatOrderDateTime(order.estimatedDeliveryAt)}`;
+      }
+      return `${FULFILLMENT_STAGE_LABELS[order.fulfillmentStage]} · จัดส่งรอบ ${order.items[0]?.harvestRoundName ?? "ถัดไป"}`;
     case "EXPIRED":
       return "หมดเวลาชำระเงิน สต็อกถูกคืนเข้าระบบแล้ว";
     case "REFUNDED":

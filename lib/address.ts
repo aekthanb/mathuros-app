@@ -87,7 +87,22 @@ export function validateAddressInput(input: Partial<CreateAddressInput>): string
   return null;
 }
 
-export function addressLines(address: SavedAddress): string[] {
+/**
+ * รับเฉพาะฟิลด์ที่ใช้จริง ไม่ผูกกับ SavedAddress ทั้งก้อน เพราะที่อยู่บนออเดอร์
+ * (OrderShipping) เป็นสำเนาที่คัดลอกไว้ตอนสั่ง ไม่มี id / isDefault / label
+ */
+export type AddressLineFields = Pick<
+  SavedAddress,
+  | "recipientName"
+  | "recipientPhone"
+  | "addressLine"
+  | "subDistrict"
+  | "district"
+  | "province"
+  | "postalCode"
+>;
+
+export function addressLines(address: AddressLineFields): string[] {
   return [
     `${address.recipientName} · ${address.recipientPhone}`,
     [address.addressLine, address.subDistrict].filter(Boolean).join(" "),
